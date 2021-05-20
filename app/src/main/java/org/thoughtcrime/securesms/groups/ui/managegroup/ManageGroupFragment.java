@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.ViewCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -35,6 +36,7 @@ import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.color.MaterialColor;
 import org.thoughtcrime.securesms.components.AvatarImageView;
 import org.thoughtcrime.securesms.components.ThreadPhotoRailView;
+import org.thoughtcrime.securesms.components.emoji.EmojiTextView;
 import org.thoughtcrime.securesms.contacts.avatars.FallbackContactPhoto;
 import org.thoughtcrime.securesms.contacts.avatars.FallbackPhoto80dp;
 import org.thoughtcrime.securesms.groups.GroupId;
@@ -43,10 +45,12 @@ import org.thoughtcrime.securesms.groups.ui.GroupErrors;
 import org.thoughtcrime.securesms.groups.ui.GroupMemberListView;
 import org.thoughtcrime.securesms.groups.ui.LeaveGroupDialog;
 import org.thoughtcrime.securesms.groups.ui.invitesandrequests.ManagePendingAndRequestingMembersActivity;
+import org.thoughtcrime.securesms.groups.ui.managegroup.dialogs.GroupDescriptionDialog;
 import org.thoughtcrime.securesms.groups.ui.managegroup.dialogs.GroupInviteSentDialog;
 import org.thoughtcrime.securesms.groups.ui.managegroup.dialogs.GroupRightsDialog;
 import org.thoughtcrime.securesms.groups.ui.managegroup.dialogs.GroupsLearnMoreBottomSheetDialogFragment;
 import org.thoughtcrime.securesms.groups.ui.migration.GroupsV1MigrationInitiationBottomSheetDialogFragment;
+import org.thoughtcrime.securesms.groups.v2.GroupDescriptionUtil;
 import org.thoughtcrime.securesms.mediaoverview.MediaOverviewActivity;
 import org.thoughtcrime.securesms.mms.GlideApp;
 import org.thoughtcrime.securesms.notifications.NotificationChannels;
@@ -54,6 +58,7 @@ import org.thoughtcrime.securesms.profiles.edit.EditProfileActivity;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.recipients.RecipientId;
 import org.thoughtcrime.securesms.recipients.ui.bottomsheet.RecipientBottomSheetDialogFragment;
+import org.thoughtcrime.securesms.recipients.ui.disappearingmessages.RecipientDisappearingMessagesActivity;
 import org.thoughtcrime.securesms.recipients.ui.notifications.CustomNotificationsDialogFragment;
 import org.thoughtcrime.securesms.recipients.ui.sharablegrouplink.ShareableGroupLinkDialogFragment;
 import org.thoughtcrime.securesms.util.AsynchronousCallback;
@@ -84,6 +89,7 @@ public class ManageGroupFragment extends LoggingFragment {
   private TextView                           pendingAndRequestingCount;
   private Toolbar                            toolbar;
   private TextView                           groupName;
+  private EmojiTextView                      groupDescription;
   private LearnMoreTextView                  groupInfoText;
   private TextView                           memberCountUnderAvatar;
   private TextView                           memberCountAboveList;
@@ -145,6 +151,7 @@ public class ManageGroupFragment extends LoggingFragment {
     avatar                      = view.findViewById(R.id.group_avatar);
     toolbar                     = view.findViewById(R.id.toolbar);
     groupName                   = view.findViewById(R.id.name);
+    groupDescription            = view.findViewById(R.id.manage_group_description);
     groupInfoText               = view.findViewById(R.id.manage_group_info_text);
     memberCountUnderAvatar      = view.findViewById(R.id.member_count);
     memberCountAboveList        = view.findViewById(R.id.member_count_2);
@@ -233,6 +240,7 @@ public class ManageGroupFragment extends LoggingFragment {
     });
 
     viewModel.getTitle().observe(getViewLifecycleOwner(), groupName::setText);
+    viewModel.getDescription().observe(getViewLifecycleOwner(), this::updateGroupDescription);
     viewModel.getMemberCountSummary().observe(getViewLifecycleOwner(), memberCountUnderAvatar::setText);
     viewModel.getFullMemberCountSummary().observe(getViewLifecycleOwner(), memberCountAboveList::setText);
     viewModel.getGroupRecipient().observe(getViewLifecycleOwner(), groupRecipient -> {
@@ -273,7 +281,12 @@ public class ManageGroupFragment extends LoggingFragment {
 
     viewModel.getDisappearingMessageTimer().observe(getViewLifecycleOwner(), string -> disappearingMessages.setText(string));
 
-    disappearingMessagesRow.setOnClickListener(v -> viewModel.handleExpirationSelection());
+    disappearingMessagesRow.setOnClickListener(v -> {
+      Recipient recipient = viewModel.getGroupRecipient().getValue();
+      if (recipient != null) {
+        startActivity(RecipientDisappearingMessagesActivity.forRecipient(requireContext(), recipient.getId()));
+      }
+    });
     blockGroup.setOnClickListener(v -> viewModel.blockAndLeave(requireActivity()));
     unblockGroup.setOnClickListener(v -> viewModel.unblock(requireActivity()));
 
@@ -429,6 +442,31 @@ public class ManageGroupFragment extends LoggingFragment {
     } else {
       threadPhotoRailView.setCursor(GlideApp.with(context), null);
       groupMediaCard.setVisibility(View.GONE);
+    }
+  }
+
+  private void updateGroupDescription(@NonNull ManageGroupViewModel.Description description) {
+    if (!TextUtils.isEmpty(description.getDescription()) || (FeatureFlags.groupsV2Description() && description.canEditDescription())) {
+      groupDescription.setVisibility(View.VISIBLE);
+      groupDescription.setMovementMethod(LinkMovementMethod.getInstance());
+      memberCountUnderAvatar.setVisibility(View.GONE);
+    } else {
+      groupDescription.setVisibility(View.GONE);
+      groupDescription.setMovementMethod(null);
+      memberCountUnderAvatar.setVisibility(View.VISIBLE);
+    }
+
+    if (TextUtils.isEmpty(description.getDescription())) {
+      if (FeatureFlags.groupsV2Description() && description.canEditDescription()) {
+        groupDescription.setText(R.string.ManageGroupActivity_add_group_description);
+        groupDescription.setOnClickListener(v -> startActivity(EditProfileActivity.getIntentForGroupProfile(requireActivity(), getGroupId())));
+      }
+    } else {
+      groupDescription.setOnClickListener(null);
+      groupDescription.setText(GroupDescriptionUtil.style(requireContext(),
+                                                          description.getDescription(),
+                                                          description.shouldLinkifyWebLinks(),
+                                                          () -> GroupDescriptionDialog.show(getChildFragmentManager(), getGroupId(), null, description.shouldLinkifyWebLinks())));
     }
   }
 
