@@ -1,6 +1,7 @@
 package org.thoughtcrime.securesms.mediasend;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -46,7 +47,7 @@ import org.thoughtcrime.securesms.components.InputAwareLayout;
 import org.thoughtcrime.securesms.components.SendButton;
 import org.thoughtcrime.securesms.components.TooltipPopup;
 import org.thoughtcrime.securesms.components.emoji.EmojiEditText;
-import org.thoughtcrime.securesms.components.emoji.EmojiKeyboardProvider;
+import org.thoughtcrime.securesms.components.emoji.EmojiEventListener;
 import org.thoughtcrime.securesms.components.emoji.EmojiToggle;
 import org.thoughtcrime.securesms.components.emoji.MediaKeyboard;
 import org.thoughtcrime.securesms.components.mention.MentionAnnotation;
@@ -104,18 +105,18 @@ import java.util.Set;
  * It will return the {@link Media} that the user decided to send.
  */
 public class MediaSendActivity extends PassphraseRequiredActivity implements MediaPickerFolderFragment.Controller,
-                                                                                      MediaPickerItemFragment.Controller,
-                                                                                      ImageEditorFragment.Controller,
-                                                                                      MediaSendVideoFragment.Controller,
-                                                                                      CameraFragment.Controller,
-                                                                                      CameraContactSelectionFragment.Controller,
-                                                                                      ViewTreeObserver.OnGlobalLayoutListener,
-                                                                                      MediaRailAdapter.RailItemListener,
-                                                                                      InputAwareLayout.OnKeyboardShownListener,
-                                                                                      InputAwareLayout.OnKeyboardHiddenListener,
-                                                                                      EmojiKeyboardProvider.EmojiEventListener,
-                                                                                      EmojiKeyboardPageFragment.Callback,
-                                                                                      EmojiSearchFragment.Callback
+                                                                             MediaPickerItemFragment.Controller,
+                                                                             ImageEditorFragment.Controller,
+                                                                             MediaSendVideoFragment.Controller,
+                                                                             CameraFragment.Controller,
+                                                                             CameraContactSelectionFragment.Controller,
+                                                                             ViewTreeObserver.OnGlobalLayoutListener,
+                                                                             MediaRailAdapter.RailItemListener,
+                                                                             InputAwareLayout.OnKeyboardShownListener,
+                                                                             InputAwareLayout.OnKeyboardHiddenListener,
+                                                                             EmojiEventListener,
+                                                                             EmojiKeyboardPageFragment.Callback,
+                                                                             EmojiSearchFragment.Callback
 {
   private static final String TAG = Log.tag(MediaSendActivity.class);
 
@@ -395,6 +396,7 @@ public class MediaSendActivity extends PassphraseRequiredActivity implements Med
     }
   }
 
+  @SuppressLint("MissingSuperCall")
   @Override
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
     Permissions.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
@@ -818,10 +820,16 @@ public class MediaSendActivity extends PassphraseRequiredActivity implements Med
         case ITEM_TOO_LARGE:
           Toast.makeText(this, R.string.MediaSendActivity_an_item_was_removed_because_it_exceeded_the_size_limit, Toast.LENGTH_LONG).show();
           break;
+        case ITEM_TOO_LARGE_OR_INVALID_TYPE:
+          Toast.makeText(this, R.string.MediaSendActivity_an_item_was_removed_because_it_exceeded_the_size_limit_or_had_an_unknown_type, Toast.LENGTH_LONG).show();
+          break;
         case ONLY_ITEM_TOO_LARGE:
           Toast.makeText(this, R.string.MediaSendActivity_an_item_was_removed_because_it_exceeded_the_size_limit, Toast.LENGTH_LONG).show();
           onNoMediaAvailable();
           break;
+        case ONLY_ITEM_IS_INVALID_TYPE:
+          Toast.makeText(this, R.string.MediaSendActivity_an_item_was_removed_because_it_had_an_unknown_type, Toast.LENGTH_LONG).show();
+          onNoMediaAvailable();
         case TOO_MANY_ITEMS:
           int maxSelection = viewModel.getMaxSelection();
           Toast.makeText(this, getResources().getQuantityString(R.plurals.MediaSendActivity_cant_share_more_than_n_items, maxSelection, maxSelection), Toast.LENGTH_SHORT).show();

@@ -22,7 +22,6 @@ import org.signal.ringrtc.HttpHeader;
 import org.signal.ringrtc.Remote;
 import org.signal.storageservice.protos.groups.GroupExternalCredential;
 import org.signal.zkgroup.VerificationFailedException;
-import org.thoughtcrime.securesms.BuildConfig;
 import org.thoughtcrime.securesms.WebRtcCallActivity;
 import org.thoughtcrime.securesms.crypto.UnidentifiedAccessUtil;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
@@ -32,6 +31,8 @@ import org.thoughtcrime.securesms.events.WebRtcViewModel;
 import org.thoughtcrime.securesms.groups.GroupId;
 import org.thoughtcrime.securesms.groups.GroupManager;
 import org.thoughtcrime.securesms.jobs.GroupCallUpdateSendJob;
+import org.thoughtcrime.securesms.jobs.RetrieveProfileJob;
+import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.recipients.RecipientId;
 import org.thoughtcrime.securesms.recipients.RecipientUtil;
@@ -167,8 +168,8 @@ public final class SignalCallManager implements CallManager.Observer, GroupCall.
     process((s, p) -> p.handleUpdateRenderedResolutions(s));
   }
 
-  public void orientationChanged(int degrees) {
-    process((s, p) -> p.handleOrientationChanged(s, degrees));
+  public void orientationChanged(boolean isLandscapeEnabled, int degrees) {
+    process((s, p) -> p.handleOrientationChanged(s, isLandscapeEnabled, degrees));
   }
 
   public void setAudioSpeaker(boolean isSpeaker) {
@@ -285,18 +286,20 @@ public final class SignalCallManager implements CallManager.Observer, GroupCall.
                                                         .map(entry -> new GroupCall.GroupMemberInfo(entry.getKey(), entry.getValue().serialize()))
                                                         .toList();
 
-        callManager.peekGroupCall(BuildConfig.SIGNAL_SFU_URL, credential.getTokenBytes().toByteArray(), members, peekInfo -> {
-          long threadId = DatabaseFactory.getThreadDatabase(context).getThreadIdFor(group);
+        callManager.peekGroupCall(SignalStore.internalValues().groupCallingServer(), credential.getTokenBytes().toByteArray(), members, peekInfo -> {
+          Long threadId = DatabaseFactory.getThreadDatabase(context).getThreadIdFor(group.getId());
 
-          DatabaseFactory.getSmsDatabase(context)
-                         .updatePreviousGroupCall(threadId,
-                                                  peekInfo.getEraId(),
-                                                  peekInfo.getJoinedMembers(),
-                                                  WebRtcUtil.isCallFull(peekInfo));
+          if (threadId != null) {
+            DatabaseFactory.getSmsDatabase(context)
+                           .updatePreviousGroupCall(threadId,
+                                                    peekInfo.getEraId(),
+                                                    peekInfo.getJoinedMembers(),
+                                                    WebRtcUtil.isCallFull(peekInfo));
 
-          ApplicationDependencies.getMessageNotifier().updateNotification(context, threadId, true, 0, BubbleUtil.BubbleState.HIDDEN);
+            ApplicationDependencies.getMessageNotifier().updateNotification(context, threadId, true, 0, BubbleUtil.BubbleState.HIDDEN);
 
-          EventBus.getDefault().postSticky(new GroupCallPeekEvent(id, peekInfo.getEraId(), peekInfo.getDeviceCount(), peekInfo.getMaxDevices()));
+            EventBus.getDefault().postSticky(new GroupCallPeekEvent(id, peekInfo.getEraId(), peekInfo.getDeviceCount(), peekInfo.getMaxDevices()));
+          }
         });
       } catch (IOException | VerificationFailedException | CallException e) {
         Log.e(TAG, "error peeking from active conversation", e);
@@ -549,6 +552,7 @@ public final class SignalCallManager implements CallManager.Observer, GroupCall.
                                       callMessage);
       } catch (UntrustedIdentityException e) {
         Log.i(TAG, "sendOpaqueCallMessage onFailure: ", e);
+        RetrieveProfileJob.enqueue(recipient.getId());
         process((s, p) -> p.handleGroupMessageSentError(s, new RemotePeer(recipient.getId()), UNTRUSTED_IDENTITY, Optional.fromNullable(e.getIdentityKey())));
       } catch (IOException e) {
         Log.i(TAG, "sendOpaqueCallMessage onFailure: ", e);
@@ -647,7 +651,7 @@ public final class SignalCallManager implements CallManager.Observer, GroupCall.
 
   @Override
   public void onFullyInitialized() {
-    process((s, p) -> p.handleOrientationChanged(s, s.getLocalDeviceState().getOrientation().getDegrees()));
+    process((s, p) -> p.handleOrientationChanged(s, s.getLocalDeviceState().isLandscapeEnabled(), s.getLocalDeviceState().getDeviceOrientation().getDegrees()));
   }
 
   @Override
@@ -730,6 +734,7 @@ public final class SignalCallManager implements CallManager.Observer, GroupCall.
                                       callMessage);
         process((s, p) -> p.handleMessageSentSuccess(s, remotePeer.getCallId()));
       } catch (UntrustedIdentityException e) {
+        RetrieveProfileJob.enqueue(remotePeer.getId());
         processSendMessageFailureWithChangeDetection(remotePeer,
                                                      (s, p) -> p.handleMessageSentError(s,
                                                                                         remotePeer.getCallId(),

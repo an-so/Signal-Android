@@ -52,9 +52,9 @@
   <string name="DraftDatabase_Draft_video_snippet">(ویدئو)</string>
   <string name="DraftDatabase_Draft_location_snippet">(مکان)</string>
   <string name="DraftDatabase_Draft_quote_snippet">(پاسخ)</string>
+  <string name="DraftDatabase_Draft_voice_note">(پیام صوتی)</string>
   <!--AttachmentKeyboard-->
   <string name="AttachmentKeyboard_gallery">گالری</string>
-  <string name="AttachmentKeyboard_gif">گیف</string>
   <string name="AttachmentKeyboard_file">فایل</string>
   <string name="AttachmentKeyboard_contact">مخاطب</string>
   <string name="AttachmentKeyboard_location">مکان</string>
@@ -208,6 +208,11 @@
   <string name="ConversationActivity_attachment_exceeds_size_limits">حجم فایل پیوست شده بیش از اندازۀ مجاز برای این نوع پیامی است که در حال ارسال آن هستید.</string>
   <string name="ConversationActivity_unable_to_record_audio">ضبط صدا ممکن نیست!</string>
   <string name="ConversationActivity_you_cant_send_messages_to_this_group">نمی‌توانید به این گروه پیام ارسال کنید، چون دیگر عضو آن نیستید.</string>
+  <string name="ConversationActivity_only_s_can_send_messages">فقط %1$s می‌تواند پیام بفرستد.</string>
+  <string name="ConversationActivity_admins">مدیران</string>
+  <string name="ConversationActivity_message_an_admin">به یک مدیر پیام دهید</string>
+  <string name="ConversationActivity_cant_start_group_call">امکان آغاز تماس گروهی وجود ندارد</string>
+  <string name="ConversationActivity_only_admins_of_this_group_can_start_a_call">فقط مدیران این گروه می‌توانند یک تماس آغاز کنند.</string>
   <string name="ConversationActivity_there_is_no_app_available_to_handle_this_link_on_your_device">هیچ برنامه‌‌ای برای باز کردن این پیوند بر روی دستگاه شما وجود ندارد.</string>
   <string name="ConversationActivity_your_request_to_join_has_been_sent_to_the_group_admin">درخواست شما برای پیوستن به مدیر گروه ارسال شد. هنگامی که اقدامی انجام دهند مطلع خواهید شد.</string>
   <string name="ConversationActivity_cancel_request">لغو درخواست</string>
@@ -241,9 +246,6 @@
   <string name="ConversationActivity_full">پر شده</string>
   <string name="ConversationActivity_error_sending_media">خطا در ارسال رسانه</string>
   <string name="ConversationActivity__reported_as_spam_and_blocked">اسپم گزارش داده و مسدود شد.</string>
-  <string name="ConversationActivity_gifs_have_moved">گیف‌ها جابجا شدند</string>
-  <string name="ConversationActivity_look_for_gifs_next_to_emoji_and_stickers">در کنار ایموجی و استیکرها بدنبال گیف‌ها بگردید</string>
-  <string name="ConversationActivity__gifs_are_now_here">گیف‌ها حالا اینجا هستند.</string>
   <!--ConversationAdapter-->
   <plurals name="ConversationAdapter_n_unread_messages">
     <item quantity="one">%d پیام خوانده نشده</item>
@@ -328,6 +330,7 @@
   <string name="ConversationTypingView__plus_d">+%1$d</string>
   <!--CreateGroupActivity-->
   <string name="CreateGroupActivity_some_contacts_cannot_be_in_legacy_groups">بعضی از مخاطبین نمی‌توانند در گروه‌های قدیمی باشند.</string>
+  <string name="CreateGroupActivity__select_members">اعضا را انتخاب کنید</string>
   <!--CreateProfileActivity-->
   <string name="CreateProfileActivity__profile">پروفایل</string>
   <string name="CreateProfileActivity_error_setting_profile_photo">خطا در ثبت عکس پروفایل</string>
@@ -341,6 +344,7 @@
   <string name="ChooseBackupFragment__icon_content_description">بازگردانی از طریق آیکون پشتیبان</string>
   <string name="ChooseBackupFragment__choose_backup">پشتیبان را انتخاب کنید</string>
   <string name="ChooseBackupFragment__learn_more">بیشتر یاد بگیرید</string>
+  <string name="ChooseBackupFragment__no_file_browser_available">انتخاب کنندهٔ فایل در دسترس نیست.</string>
   <!--RestoreBackupFragment-->
   <string name="RestoreBackupFragment__restore_complete">بازگردانی کامل شد</string>
   <string name="RestoreBackupFragment__to_continue_using_backups_please_choose_a_folder">برای ادامهٔ استفاده از پشتیبان‌ها، لطفاً یک پوشه انتخاب کنید. پشتیبان‌های جدید در این محل ذخیره خواهند شد.</string>
@@ -418,6 +422,7 @@
   <!--ShareActivity-->
   <string name="ShareActivity_share_with">اشتراک‌گذاری با</string>
   <string name="ShareActivity_multiple_attachments_are_only_supported">انتخاب چندگانهٔ پیوست‌ها فقط برای عکس‌ها و ویدئوها پشتیبانی می‌شود.</string>
+  <string name="ShareActivity_you_do_not_have_permission_to_send_to_this_group">شما اجازهٔ ارسال به این گروه را ندارید.</string>
   <!--GcmRefreshJob-->
   <string name="GcmRefreshJob_Permanent_Signal_communication_failure">خرابی دائم در ارتباط سیگنال!</string>
   <string name="GcmRefreshJob_Signal_was_unable_to_register_with_Google_Play_Services">سیگنال قادر نبود تا با خدمات ‌Google Play ثبت‌نام کند. پیام‌ها و تماس‌های سیگنال غیرفعال شده‌اند، لطفاً از طریق تنظیمات &gt; پیشرفته دوباره ثبت‌نام کنید.</string>
@@ -434,6 +439,7 @@
   <string name="AddToGroupActivity_add_to_groups">افزودن به گروه‌ها</string>
   <string name="AddToGroupActivity_this_person_cant_be_added_to_legacy_groups">این فرد نمی‌تواند به گروه‌های قدیمی اضافه شود.</string>
   <string name="AddToGroupActivity_add">افزودن</string>
+  <string name="AddToGroupActivity_add_to_a_group">افزودن به گروه</string>
   <!--ChooseNewAdminActivity-->
   <string name="ChooseNewAdminActivity_choose_new_admin">مدیر جدید را انتخاب کنید</string>
   <string name="ChooseNewAdminActivity_done">تمام</string>
@@ -559,11 +565,13 @@
   <!--AddMembersActivity-->
   <string name="AddMembersActivity__done">انجام شد</string>
   <string name="AddMembersActivity__this_person_cant_be_added_to_legacy_groups">این فرد نمی‌تواند به گروه‌های قدیمی اضافه شود.</string>
+  <string name="AddMembersActivity__this_person_cant_be_added_to_announcement_groups">این فرد نمی‌تواند به گروه‌های اطلاع‌رسانی اضافه شود.</string>
   <plurals name="AddMembersActivity__add_d_members_to_s">
     <item quantity="one">افزودن «%1$s» به «%2$s»؟</item>
     <item quantity="other">افزودن %3$d عضو به «%2$s»؟</item>
   </plurals>
   <string name="AddMembersActivity__add">افزودن</string>
+  <string name="AddMembersActivity__add_members">افزودن اعضا</string>
   <!--AddGroupDetailsFragment-->
   <string name="AddGroupDetailsFragment__name_this_group">نامی برای گروه انتخاب کنید</string>
   <string name="AddGroupDetailsFragment__create_group">ایجاد گروه</string>
@@ -627,7 +635,8 @@
   <string name="ManageGroupActivity_only_admins_can_enable_or_disable_the_option_to_approve_new_members">فقط مدیران می‌توانند امکان تأیید کاربران جدید را فعال یا غیرفعال کنند.</string>
   <string name="ManageGroupActivity_only_admins_can_reset_the_sharable_group_link">فقط مدیران می‌توانند پیوند قابل اشتراک گروه را بازنشانی کنند.</string>
   <string name="ManageGroupActivity_you_dont_have_the_rights_to_do_this">شما اجازهٔ انجام این کار را ندارید</string>
-  <string name="ManageGroupActivity_not_capable">کسی که شما به گروه اضافه کردید از گروه‌های جدید پشتیبانی نمی‌کند و باید سیگنال را به‌روزرسانی کند</string>
+  <string name="ManageGroupActivity_not_capable">یکی از کسانی که شما اضافه کردید از گروه‌های جدید پشتیبانی نمی‌کند و باید سیگنال را به‌روزرسانی کند</string>
+  <string name="ManageGroupActivity_not_announcement_capable">یکی از کسانی که شما اضافه کردید از گروه‌های اطلا‌ع‌رسانی پشتیبانی نمی‌کند و باید سیگنال را به‌روزرسانی کند</string>
   <string name="ManageGroupActivity_failed_to_update_the_group">به‌روزرسانی گروه ناموفق بود.</string>
   <string name="ManageGroupActivity_youre_not_a_member_of_the_group">شما عضو گروه نیستید</string>
   <string name="ManageGroupActivity_failed_to_update_the_group_please_retry_later">به‌روزرسانی گروه موفق نبود، لطفاً بعداً دوباره امتحان کنید</string>
@@ -656,32 +665,11 @@
   <string name="ManageProfileFragment_your_username">نام کاربری شما</string>
   <string name="ManageProfileFragment_failed_to_set_avatar">تنظیم عکس پروفایل ناموفق بود</string>
   <!--ManageRecipientActivity-->
-  <string name="ManageRecipientActivity_add_to_system_contacts">افزودن به مخاطبین سیستم</string>
-  <string name="ManageRecipientActivity_this_person_is_in_your_contacts">این فرد در مخاطبین شماست</string>
-  <string name="ManageRecipientActivity_disappearing_messages">پیام‌های ناپدید شونده</string>
-  <string name="ManageRecipientActivity_chat_color">رنگ گفتگو</string>
-  <string name="ManageRecipientActivity_chat_wallpaper">کاغذدیواری گفتگو</string>
-  <string name="ManageRecipientActivity_block">مسدود کردن</string>
-  <string name="ManageRecipientActivity_unblock">رفع مسدودیت</string>
-  <string name="ManageRecipientActivity_view_safety_number">مشاهدهٔ شمارهٔ امنیتی</string>
-  <string name="ManageRecipientActivity_mute_notifications">بستن اعلان‌ها</string>
-  <string name="ManageRecipientActivity_custom_notifications">اعلان‌ها‌ی سفارشی</string>
-  <string name="ManageRecipientActivity_until_s">تا %1$s</string>
-  <string name="ManageRecipientActivity_always">همیشه</string>
-  <string name="ManageRecipientActivity_off">خاموش</string>
-  <string name="ManageRecipientActivity_on">روشن</string>
-  <string name="ManageRecipientActivity_add_to_a_group">اضافه کردن به گروه</string>
-  <string name="ManageRecipientActivity_view_all_groups">مشاهدهٔ همهٔ گروه‌ها</string>
-  <string name="ManageRecipientActivity_see_all">مشاهدهٔ همه</string>
   <string name="ManageRecipientActivity_no_groups_in_common">هیچ گروه مشترکی وجود ندارد</string>
   <plurals name="ManageRecipientActivity_d_groups_in_common">
     <item quantity="one">%d گروه مشترک</item>
     <item quantity="other">%d گروه مشترک</item>
   </plurals>
-  <string name="ManageRecipientActivity_message_description">پیام</string>
-  <string name="ManageRecipientActivity_voice_call_description">تماس صوتی</string>
-  <string name="ManageRecipientActivity_insecure_voice_call_description">تماس صوتی ناامن</string>
-  <string name="ManageRecipientActivity_video_call_description">تماس تصویری</string>
   <plurals name="GroupMemberList_invited">
     <item quantity="one">%1$s ۱ نفر را دعوت کرد</item>
     <item quantity="other">%1$s %2$d نفر را دعوت کرد</item>
@@ -825,6 +813,7 @@
   <string name="MediaOverviewActivity_audio">صوت</string>
   <string name="MediaOverviewActivity_video">ویدئو</string>
   <string name="MediaOverviewActivity_image">تصویر</string>
+  <string name="MediaOverviewActivity_voice_message">پیام صوتی</string>
   <string name="MediaOverviewActivity_sent_by_s">ارسال شد از %1$s</string>
   <string name="MediaOverviewActivity_sent_by_you">ارسال شد از شما</string>
   <string name="MediaOverviewActivity_sent_by_s_to_s">ارسال شد از %1$s به %2$s</string>
@@ -841,6 +830,7 @@
   <string name="Megaphones_invite_friends">دعوت دوستان</string>
   <string name="Megaphones_use_sms">استفاده از پیامک</string>
   <string name="Megaphones_appearance">ظاهر برنامه</string>
+  <string name="Megaphones_add_photo">افزودن عکس</string>
   <!--NotificationBarManager-->
   <string name="NotificationBarManager_signal_call_in_progress">تماس سیگنال در جریان است</string>
   <string name="NotificationBarManager__establishing_signal_call">در حال برقراری تماس سیگنال</string>
@@ -865,6 +855,8 @@
   <!--MediaSendActivity-->
   <string name="MediaSendActivity_add_a_caption">افزودن یک زیرنویس…</string>
   <string name="MediaSendActivity_an_item_was_removed_because_it_exceeded_the_size_limit">یک مورد به دلیل عدم رعایت محدودیت اندازه حذف شد</string>
+  <string name="MediaSendActivity_an_item_was_removed_because_it_had_an_unknown_type">یک مورد به دلیل داشتن یک نوع ناشناخته حذف شد</string>
+  <string name="MediaSendActivity_an_item_was_removed_because_it_exceeded_the_size_limit_or_had_an_unknown_type">یک مورد به دلیل عدم رعایت محدودیت اندازه یا داشتن نوع ناشناخته حذف شد</string>
   <string name="MediaSendActivity_camera_unavailable">دوربین در دسترس نیست.</string>
   <string name="MediaSendActivity_message_to_s">پیام به %s </string>
   <string name="MediaSendActivity_message">پیام</string>
@@ -880,6 +872,9 @@
   <!--MediaRepository-->
   <string name="MediaRepository_all_media">همهٔ رسانه‌ها</string>
   <string name="MediaRepository__camera">دوربین</string>
+  <!--MessageDecryptionUtil-->
+  <string name="MessageDecryptionUtil_failed_to_decrypt_message">رمزگشایی پیام ناموفق بود.</string>
+  <string name="MessageDecryptionUtil_tap_to_send_a_debug_log">برای ارسال یک گزارش عیب‌یابی ضربه بزنید</string>
   <!--MessageRecord-->
   <string name="MessageRecord_unknown">ناشناخته</string>
   <string name="MessageRecord_message_encrypted_with_a_legacy_protocol_version_that_is_no_longer_supported">یک پیام رمزگذاری شده با استفاده از نسخه‌ای قدیمی از سیگنال که دیگر پشتیبانی نمی‌شود برایتان ارسال شده است. لطفاً از فرستنده بخواهید تا به آخرین نسخه به‌روزرسانی کند و آن پیام را دوباره ارسال کند.</string>
@@ -995,6 +990,13 @@
   <string name="MessageRecord_you_changed_who_can_edit_group_membership_to_s">شما قابلیت ویرایش اعضای گروه را به «%1$s» انتقال دادید.</string>
   <string name="MessageRecord_s_changed_who_can_edit_group_membership_to_s">%1$s قابلیت ویرایش اعضای گروه را به «%2$s» انتقال داد.</string>
   <string name="MessageRecord_who_can_edit_group_membership_has_been_changed_to_s">قابلیت ویرایش اعضای گروه به «%1$s» انتقال یافت.</string>
+  <!--GV2 announcement group change-->
+  <string name="MessageRecord_you_allow_all_members_to_send">شما تنظیمات گروه را تغییر دادید تا به همهٔ اعضا اجازهٔ ارسال پیام بدهید.</string>
+  <string name="MessageRecord_you_allow_only_admins_to_send">شما تنظیمات گروه را تغییر دادید تا فقط به مدیران اجازهٔ ارسال پیام بدهید.</string>
+  <string name="MessageRecord_s_allow_all_members_to_send">%1$s تنظیمات گروه را تغییر داد تا به همهٔ اعضا اجازهٔ ارسال پیام بدهد.</string>
+  <string name="MessageRecord_s_allow_only_admins_to_send">%1$s تنظیمات گروه را تغییر داد تا فقط به مدیران اجازهٔ ارسال پیام بدهد.</string>
+  <string name="MessageRecord_allow_all_members_to_send">تنظیمات گروه تغییر داده شدند تا به اعضا اجازهٔ ارسال پیام داده شود.</string>
+  <string name="MessageRecord_allow_only_admins_to_send">تنظیمات گروه تغییر داده شدند تا به مدیران اجازهٔ ارسال پیام داده شود.</string>
   <!--GV2 group link invite access level change-->
   <string name="MessageRecord_you_turned_on_the_group_link_with_admin_approval_off">شما پیوند گروه را بدون موافقت مدیر فعال کردید.</string>
   <string name="MessageRecord_you_turned_on_the_group_link_with_admin_approval_on">شما پیوند گروه را با موافقت مدیر فعال کردید.</string>
@@ -1176,6 +1178,8 @@
   <string name="RecaptchaRequiredBottomSheetFragment_verify_to_continue_messaging">برای ادامهٔ پیام‌‌رسانی وارسی کنید</string>
   <string name="RecaptchaRequiredBottomSheetFragment_to_help_prevent_spam_on_signal">برای کمک به جلوگیری از هرزنگاری یا اسپم در سیگنال، لطفاً وارسی را کامل کنید.</string>
   <string name="RecaptchaRequiredBottomSheetFragment_after_verifying_you_can_continue_messaging">پس از وارسی کردن، می‌توانید به پیام‌رسانی ادامه دهید. هر پیام متوقف شده‌ای به صورت خودکار ارسال خواهد شد.</string>
+  <!--Recipient-->
+  <string name="Recipient_you">شما</string>
   <!--RecipientPreferencesActivity-->
   <string name="RecipientPreferenceActivity_block">مسدود کردن</string>
   <string name="RecipientPreferenceActivity_unblock">رفع مسدودیت</string>
@@ -1197,13 +1201,12 @@
   <string name="WebRtcCallActivity__signal_s">%1$s سیگنال</string>
   <string name="WebRtcCallActivity__calling">در حال برقراری تماس…</string>
   <!--WebRtcCallView-->
-  <string name="WebRtcCallView__signal_voice_call">تماس صوتی سیگنال</string>
-  <string name="WebRtcCallView__signal_video_call">تماس تصویری سیگنال</string>
+  <string name="WebRtcCallView__signal_call">تماس سیگنال</string>
+  <string name="WebRtcCallView__signal_video_call">تماس ویدئویی سیگنال</string>
   <string name="WebRtcCallView__start_call">شروع تماس</string>
   <string name="WebRtcCallView__join_call">پیوستن به تماس</string>
   <string name="WebRtcCallView__call_is_full">ظرفیت تماس تکمیل است</string>
   <string name="WebRtcCallView__the_maximum_number_of_d_participants_has_been_Reached_for_this_call">به حداکثر تعداد %1$d شرکت‌کننده برای این تماس رسیده‌اید، بعد‌اً دوباره امتحان کنید. </string>
-  <string name="WebRtcCallView__s_group_call">تماس گروهی «%1$s»</string>
   <string name="WebRtcCallView__view_participants_list">مشاهدهٔ شرکت‌کنندگان</string>
   <string name="WebRtcCallView__your_video_is_off">ویدئوی شما خاموش است</string>
   <string name="WebRtcCallView__reconnecting">در حال اتصال دوباره…</string>
@@ -1217,6 +1220,11 @@
     <item quantity="one">%1$s، %2$s و %3$d نفر دیگر در این تماس حضور دارند</item>
     <item quantity="other">%1$s، %2$s و %3$d نفر دیگر در این تماس حضور دارند</item>
   </plurals>
+  <string name="WebRtcCallView__flip">برگرداندن</string>
+  <string name="WebRtcCallView__speaker">بلندگو</string>
+  <string name="WebRtcCallView__camera">دوربین</string>
+  <string name="WebRtcCallView__mute">بستن</string>
+  <string name="WebRtcCallView__end_call">پایان دادن به تماس</string>
   <!--CallParticipantsListDialog-->
   <plurals name="CallParticipantsListDialog_in_this_call_d_people">
     <item quantity="one">در این تماس · %1$d نفر</item>
@@ -1357,7 +1365,7 @@
   <string name="SubmitDebugLogActivity_success">موفقیت!</string>
   <string name="SubmitDebugLogActivity_copy_this_url_and_add_it_to_your_issue">این ‌‌URL را کپی کرده و آن را به گزارش اشکال یا ایمیل پشتیبانی اضافه کنید:\n\n<b>%1$s</b></string>
   <string name="SubmitDebugLogActivity_share">اشتراک‌گذاری</string>
-  <string name="SubmitDebugLogActivity_this_log_will_be_posted_publicly_online">این گزارش به صورت عمومی و آنلاین برای بازنگری مشارکت‌کنندگان منتشر خواهد شد، شما می‌توانید قبل از بارگذاری آن را بازرسی کرده و ویرایش کنید.</string>
+  <string name="SubmitDebugLogActivity_this_log_will_be_posted_publicly_online_for_contributors">این گزارش به صورت عمومی و آنلاین برای بازنگری مشارکت‌کنندگان منتشر خواهد شد، شما می‌توانید قبل از بارگذاری آن را بازرسی کنید.</string>
   <!--SupportEmailUtil-->
   <string name="SupportEmailUtil_filter">فیلتر:</string>
   <string name="SupportEmailUtil_device_info">اطلاعات دستگاه:</string>
@@ -1649,6 +1657,7 @@
   <string name="conversation_fragment__scroll_to_the_bottom_content_description">رفتن به پایین</string>
   <!--safety_number_change_dialog-->
   <string name="safety_number_change_dialog__safety_number_changes">تغییرات شمارهٔ امنیتی</string>
+  <string name="safety_number_change_dialog__accept">پذیرفتن</string>
   <string name="safety_number_change_dialog__send_anyway">در هر صورت ارسال کن</string>
   <string name="safety_number_change_dialog__call_anyway">در هر صورت تماس بگیر</string>
   <string name="safety_number_change_dialog__join_call">پیوستن به تماس</string>
@@ -1726,8 +1735,6 @@
   <string name="giphy_activity_toolbar__search_gifs">جستجوی گیف‌ها</string>
   <!--giphy_fragment-->
   <string name="giphy_fragment__nothing_found">چیزی یافت نشد</string>
-  <!--log_submit_activity-->
-  <string name="log_submit_activity__this_log_will_be_posted_online">این گزارش به صورت آنلاین برای بازنگری مشارکت‌کنندگان منتشر خواهد شد، می‌توانید آن را قبل از ارسال بررسی کرده و ویرایش کنید.</string>
   <!--database_migration_activity-->
   <string name="database_migration_activity__would_you_like_to_import_your_existing_text_messages">آیا مایل به وارد کردن پیام‌های متنی موجود خود به پایگاه داده رمزگذاری شدهٔ سیگنال هستید؟</string>
   <string name="database_migration_activity__the_default_system_database_will_not_be_modified">پایگاه دادهٔ پيش‌‌فرض سيستم به هيچ شکلی تغییر نخواهد کرد.</string>
@@ -1756,7 +1763,7 @@
   <string name="prompt_mms_activity__to_send_media_and_group_messages_tap_ok">برای ارسال رسانه و پیام‌های گروهی، روی \'قبول\' ضربه بزنید و تنظیمات خواسته شده را کامل کنید. تنظیمات فراپیام برای اپراتور شما معمولاً با جستجو برای \'APN اپراتور شما\' یافت می‌شود. شما فقط یکبار نیاز به انجام این کار دارید.</string>
   <!--BadDecryptLearnMoreDialog-->
   <string name="BadDecryptLearnMoreDialog_delivery_issue">اشکال تحویل</string>
-  <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">یک پیام، استیکر، واکنش، یا رسید خوانده شدن از %s نتوانست به شما تحویل داده شود. ممکن است آن‌ها آن را به طور مستقیم، یا در یک گروه به شما ارسال کرده باشند.</string>
+  <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">یک پیام، استیکر، واکنش، یا رسید خوانده شدن از %s نتوانست به شما تحویل داده شود. آن‌ها ممکن است آن را به طور مستقیم، یا در یک گروه به شما ارسال کرده باشند.</string>
   <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">یک پیام، استیکر، واکنش، یا رسید خوانده شدن از %s نتوانست به شما تحویل داده شود.</string>
   <!--profile_create_activity-->
   <string name="CreateProfileActivity_first_name_required">نام کوچک (الزامی)</string>
@@ -1814,6 +1821,7 @@
   <string name="message_details_recipient_header__delivered_to">تحویل داده شد به</string>
   <string name="message_details_recipient_header__read_by">خوانده شد توسط</string>
   <string name="message_details_recipient_header__not_sent">ارسال نشد</string>
+  <string name="message_details_recipient_header__viewed">مشاهده شده توسط</string>
   <!--message_Details_recipient-->
   <string name="message_details_recipient__failed_to_send">ارسال ناموفق بود</string>
   <string name="message_details_recipient__new_safety_number">شمارهٔ امنیتی جدید</string>
@@ -1858,7 +1866,7 @@
   </string-array>
   <!--ReactWithAnyEmojiBottomSheetDialogFragment-->
   <string name="ReactWithAnyEmojiBottomSheetDialogFragment__this_message">این پیام</string>
-  <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recently_used">اخیراً استفاده شده</string>
+  <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recently_used">به‌تازگی استفاده شده</string>
   <string name="ReactWithAnyEmojiBottomSheetDialogFragment__smileys_and_people">لبخندها و آدم‌ها</string>
   <string name="ReactWithAnyEmojiBottomSheetDialogFragment__nature">طبیعت</string>
   <string name="ReactWithAnyEmojiBottomSheetDialogFragment__food">غذا</string>
@@ -1868,6 +1876,7 @@
   <string name="ReactWithAnyEmojiBottomSheetDialogFragment__symbols">نمادها</string>
   <string name="ReactWithAnyEmojiBottomSheetDialogFragment__flags">پرچم‌ها</string>
   <string name="ReactWithAnyEmojiBottomSheetDialogFragment__emoticons">شکلک‌ها</string>
+  <string name="ReactWithAnyEmojiBottomSheetDialogFragment__no_results_found">هیچ نتیجه‌ای پیدا نشد</string>
   <!--arrays.xml-->
   <string name="arrays__use_default">استفاده از پیش‌فرض سیستم</string>
   <string name="arrays__use_custom">استفاده از سفارشی</string>
@@ -2644,7 +2653,7 @@
   <string name="RecipientBottomSheet_add_to_a_group">افزودن به گروه</string>
   <string name="RecipientBottomSheet_add_to_another_group">افزودن به گروهی دیگر</string>
   <string name="RecipientBottomSheet_view_safety_number">مشاهدهٔ شمارهٔ امنیتی</string>
-  <string name="RecipientBottomSheet_make_group_admin">ارتقا به مدیر گروه</string>
+  <string name="RecipientBottomSheet_make_admin">ارتقا به مدیر</string>
   <string name="RecipientBottomSheet_remove_as_admin">حذف بعنوان مدیر</string>
   <string name="RecipientBottomSheet_remove_from_group">حذف از گروه</string>
   <string name="RecipientBottomSheet_message_description">پیام</string>
@@ -2676,6 +2685,7 @@
   <string name="GroupLinkBottomSheet_copied_to_clipboard">روی کلیپ‌بورد کپی شد</string>
   <string name="GroupLinkBottomSheet_the_link_is_not_currently_active">پیوند در حال حاضر فعال نیست</string>
   <!--VoiceNotePlaybackPreparer-->
+  <string name="VoiceNotePlaybackPreparer__failed_to_play_voice_message">پخش پیام صوتی ناموفق بود</string>
   <!--VoiceNoteMediaDescriptionCompatFactory-->
   <string name="VoiceNoteMediaDescriptionCompatFactory__voice_message">پیام صوتی · %1$s</string>
   <string name="VoiceNoteMediaDescriptionCompatFactory__s_to_s">%1$s به %2$s</string>
@@ -2710,7 +2720,7 @@
   <string name="ReviewCard__update_contact">به‌روزرسانی مخاطب</string>
   <string name="ReviewCard__block">مسدود کردن</string>
   <string name="ReviewCard__delete">حذف</string>
-  <string name="ReviewCard__recently_changed">اخیراً نام پروفایل خود را از %1$s به %2$s تغییر داد</string>
+  <string name="ReviewCard__recently_changed">به‌تازگی نام پروفایل خود را از %1$s به %2$s تغییر داد</string>
   <!--CallParticipantsListUpdatePopupWindow-->
   <string name="CallParticipantsListUpdatePopupWindow__s_joined">%1$s به تماس پیوست</string>
   <string name="CallParticipantsListUpdatePopupWindow__s_and_s_joined">%1$s و %2$s پیوستند</string>
@@ -2742,6 +2752,10 @@
   <string name="DeleteAccountCountryPickerFragment__search_countries">جستجوی کشورها</string>
   <!--CreateGroupActivity-->
   <string name="CreateGroupActivity__skip">رد کردن</string>
+  <plurals name="CreateGroupActivity__d_members">
+    <item quantity="one">%1$d عضو</item>
+    <item quantity="other">%1$d عضو</item>
+  </plurals>
   <!--ShareActivity-->
   <string name="ShareActivity__share">اشتراک‌گذاری</string>
   <string name="ShareActivity__send">ارسال</string>
@@ -2955,6 +2969,7 @@
     <item quantity="one">این رنگ سفارشی در %1$d گفتگو استفاده شده است. آیا می‌خواهید آن را از همهٔ گفتگوها حذف کنید؟</item>
     <item quantity="other">این رنگ سفارشی در %1$d گفتگو استفاده شده است. آیا می‌خواهید آن را از همهٔ گفتگوها حذف کنید؟</item>
   </plurals>
+  <string name="ChatColorSelectionFragment__delete_chat_color">حذف رنگ گفتگو؟</string>
   <!--CustomChatColorCreatorFragment-->
   <string name="CustomChatColorCreatorFragment__solid">یک‌دست</string>
   <string name="CustomChatColorCreatorFragment__gradient">گرادیان</string>
@@ -2982,6 +2997,11 @@
   <string name="ChatColorsMegaphone__we_switched_up_chat_colors">ما رنگ‌های گفتگو را تغییر دادیم تا به شما گزینه‌ها‌ی بیشتری بدهیم و خواندن گفتگوها را آسان‌تر کنیم.</string>
   <string name="ChatColorsMegaphone__appearance">ظاهر برنامه</string>
   <string name="ChatColorsMegaphone__not_now">حالا نه</string>
+  <!--AddAProfilePhotoMegaphone-->
+  <string name="AddAProfilePhotoMegaphone__add_a_profile_photo">یک عکس پروفایل اضافه کنید</string>
+  <string name="AddAProfilePhotoMegaphone__choose_a_look_and_color">برای حروف اول خود یک ظاهر و رنگ جدید انتخاب کنید.</string>
+  <string name="AddAProfilePhotoMegaphone__not_now">حالا نه</string>
+  <string name="AddAProfilePhotoMegaphone__add_photo">افزودن عکس</string>
   <!--KeyboardPagerFragment-->
   <string name="KeyboardPagerFragment_emoji">شکلک</string>
   <string name="KeyboardPagerFragment_open_emoji_search">جستجوی ایموجی را باز کنید</string>
@@ -2999,5 +3019,101 @@
   <string name="StickerSearchDialogFragment_no_results_found">هیچ نتیجه‌ای پیدا نشد</string>
   <string name="EmojiSearchFragment__no_results_found">هیچ نتیجه‌ای پیدا نشد</string>
   <string name="NotificationsSettingsFragment__unknown_ringtone">صدای زنگ ناشناخته</string>
+  <!--ConversationSettingsFragment-->
+  <string name="ConversationSettingsFragment__send_message">ارسال پیام</string>
+  <string name="ConversationSettingsFragment__start_video_call">شروع تماس تصویری</string>
+  <string name="ConversationSettingsFragment__start_audio_call">شروع تماس صوتی</string>
+  <string name="ConversationSettingsFragment__message">پیام</string>
+  <string name="ConversationSettingsFragment__video">تصویری</string>
+  <string name="ConversationSettingsFragment__audio">صوتی</string>
+  <string name="ConversationSettingsFragment__call">تماس</string>
+  <string name="ConversationSettingsFragment__mute">بستن</string>
+  <string name="ConversationSettingsFragment__muted">بسته شد</string>
+  <string name="ConversationSettingsFragment__search">جستجو</string>
+  <string name="ConversationSettingsFragment__disappearing_messages">پیام‌های ناپدید شونده</string>
+  <string name="ConversationSettingsFragment__sounds_and_notifications">صداها و اعلان‌ها</string>
+  <string name="ConversationSettingsFragment__contact_details">جزئیات مخاطب</string>
+  <string name="ConversationSettingsFragment__view_safety_number">مشاهدهٔ شمارهٔ امنیتی</string>
+  <string name="ConversationSettingsFragment__block">مسدود کردن</string>
+  <string name="ConversationSettingsFragment__block_group">مسدود کردن گروه</string>
+  <string name="ConversationSettingsFragment__unblock">رفع مسدودیت</string>
+  <string name="ConversationSettingsFragment__unblock_group">رفع مسدودیت گروه</string>
+  <string name="ConversationSettingsFragment__add_to_a_group">افزودن به گروه</string>
+  <string name="ConversationSettingsFragment__see_all">مشاهدهٔ همه</string>
+  <string name="ConversationSettingsFragment__add_members">افزودن اعضا</string>
+  <string name="ConversationSettingsFragment__permissions">مجوزها</string>
+  <string name="ConversationSettingsFragment__requests_and_invites">درخواست‌ها و دعوت‌ها</string>
+  <string name="ConversationSettingsFragment__group_link">پیوند گروه</string>
+  <string name="ConversationSettingsFragment__add_as_a_contact">افزودن به صورت یک مخاطب</string>
+  <string name="ConversationSettingsFragment__unmute">باز کردن صدا</string>
+  <string name="ConversationSettingsFragment__conversation_muted_until_s">مکالمه تا %1$s بسته شد</string>
+  <string name="ConversationSettingsFragment__conversation_muted_forever">مکالمه برای همیشه بسته شد</string>
+  <string name="ConversationSettingsFragment__copied_phone_number_to_clipboard">شماره‌تلفن در کلیپ‌بورد کپی شد.</string>
+  <string name="ConversationSettingsFragment__phone_number">شماره‌تلفن</string>
+  <!--PermissionsSettingsFragment-->
+  <string name="PermissionsSettingsFragment__add_members">افزودن اعضا</string>
+  <string name="PermissionsSettingsFragment__edit_group_info">ویرایش اطلاعات گروه</string>
+  <string name="PermissionsSettingsFragment__send_messages">ارسال پیام‌ها</string>
+  <string name="PermissionsSettingsFragment__all_members">همهٔ اعضا</string>
+  <string name="PermissionsSettingsFragment__only_admins">فقط مدیران</string>
+  <string name="PermissionsSettingsFragment__who_can_add_new_members">چه کسی می‌تواند اعضای جدید اضافه کند؟</string>
+  <string name="PermissionsSettingsFragment__who_can_edit_this_groups_info">چه کسی می‌تواند اطلاعات این گروه را ویرایش کند؟</string>
+  <string name="PermissionsSettingsFragment__who_can_send_messages">چه کسی ‌می‌تواند پیام ارسال کنند؟</string>
+  <!--SoundsAndNotificationsSettingsFragment-->
+  <string name="SoundsAndNotificationsSettingsFragment__mute_notifications">بستن اعلان‌ها</string>
+  <string name="SoundsAndNotificationsSettingsFragment__not_muted">بسته شده نیست</string>
+  <string name="SoundsAndNotificationsSettingsFragment__muted_until_s">بسته شد تا %1$s</string>
+  <string name="SoundsAndNotificationsSettingsFragment__mentions">اشاره‌ها</string>
+  <string name="SoundsAndNotificationsSettingsFragment__always_notify">همیشه آگاه کن</string>
+  <string name="SoundsAndNotificationsSettingsFragment__do_not_notify">آگاه نکن</string>
+  <string name="SoundsAndNotificationsSettingsFragment__custom_notifications">اعلان‌ها‌ی سفارشی</string>
+  <!--StickerKeyboard-->
+  <string name="StickerKeyboard__recently_used">به‌تازگی استفاده شده</string>
+  <!--PlaybackSpeedToggleTextView-->
+  <string name="PlaybackSpeedToggleTextView__p5x">۵x.</string>
+  <string name="PlaybackSpeedToggleTextView__1x">۱x</string>
+  <string name="PlaybackSpeedToggleTextView__2x">۲x</string>
+  <!--PaymentRecipientSelectionFragment-->
+  <string name="PaymentRecipientSelectionFragment__new_payment">پرداخت جدید</string>
+  <!--NewConversationActivity-->
+  <string name="NewConversationActivity__new_message">پیام جدید</string>
+  <!--ContactFilterView-->
+  <string name="ContactFilterView__search_name_or_number">نام یا شماره را جستجو کنید</string>
+  <!--VoiceNotePlayerView-->
+  <string name="VoiceNotePlayerView__s_dot_s">%1$s · %2$s</string>
+  <string name="VoiceNotePlayerView__stop_voice_message">توقف پیام صوتی</string>
+  <string name="VoiceNotePlayerView__change_voice_message_speed">تغییر سرعت پیام صوتی</string>
+  <string name="VoiceNotePlayerView__pause_voice_message">توقف موقت پیام صوتی</string>
+  <string name="VoiceNotePlayerView__play_voice_message">پخش پیام صوتی</string>
+  <string name="VoiceNotePlayerView__navigate_to_voice_message">رفتن به پیام صوتی</string>
+  <!--AvatarPickerFragment-->
+  <string name="AvatarPickerFragment__avatar_preview">پیش‌نمایش آواتار</string>
+  <string name="AvatarPickerFragment__camera">دوربین</string>
+  <string name="AvatarPickerFragment__take_a_picture">یک عکس بگیرید</string>
+  <string name="AvatarPickerFragment__choose_a_photo">یک عکس انتخاب کنید</string>
+  <string name="AvatarPickerFragment__photo">عکس</string>
+  <string name="AvatarPickerFragment__text">متن</string>
+  <string name="AvatarPickerFragment__save">ذخیره</string>
+  <string name="AvatarPickerFragment__select_an_avatar">یک آواتار انتخاب کنید</string>
+  <string name="AvatarPickerFragment__clear_avatar">پاک کردن آواتار</string>
+  <string name="AvatarPickerFragment__edit">ویرایش</string>
+  <string name="AvatarPickerRepository__failed_to_save_avatar">ذخیره کردن آواتار موفق نبود</string>
+  <!--TextAvatarCreationFragment-->
+  <string name="TextAvatarCreationFragment__preview">پیش‌نمایش</string>
+  <string name="TextAvatarCreationFragment__done">تمام</string>
+  <string name="TextAvatarCreationFragment__text">متن</string>
+  <string name="TextAvatarCreationFragment__color">رنگ</string>
+  <!--VectorAvatarCreationFragment-->
+  <string name="VectorAvatarCreationFragment__select_a_color">یک رنگ انتخاب کنید</string>
+  <!--ContactSelectionListItem-->
+  <string name="ContactSelectionListItem__sms">پیامک</string>
+  <string name="ContactSelectionListItem__dot_s">%1$s</string>
+  <!--DSLSettingsToolbar-->
+  <string name="DSLSettingsToolbar__navigate_up">حرکت به سمت بالا</string>
+  <string name="MultiselectForwardFragment__forward_to">بازارسال به</string>
+  <string name="MultiselectForwardFragment__add_a_message">افزودن یک پیام</string>
+  <!-- Removed by excludeNonTranslatables <string name="MultiselectForwardFragment__messages_sent">پیام‌ها ارسال شدند</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="MultiselectForwardFragment__messages_failed_to_send">ارسال پیام‌ها ناموفق بود</string> -->
+  <string name="MultiselectForwardFragment__limit_reached">به محدودیت رسیدید</string>
   <!--EOF-->
 </resources>

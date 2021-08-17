@@ -3,8 +3,8 @@ package org.thoughtcrime.securesms.util;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import androidx.annotation.WorkerThread;
 
 import com.annimon.stream.Stream;
 
@@ -19,6 +19,7 @@ import org.thoughtcrime.securesms.jobs.RemoteConfigRefreshJob;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.messageprocessingalarm.MessageProcessReceiver;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -43,7 +44,7 @@ import java.util.concurrent.TimeUnit;
  * Other interesting things you can do:
  * - Make a flag {@link #HOT_SWAPPABLE}
  * - Make a flag {@link #STICKY} -- booleans only!
- * - Register a listener for flag changes in  {@link #FLAG_CHANGE_LISTENERS}
+ * - Register a listener for flag changes in {@link #FLAG_CHANGE_LISTENERS}
  */
 public final class FeatureFlags {
 
@@ -77,7 +78,11 @@ public final class FeatureFlags {
   private static final String MEDIA_QUALITY_LEVELS              = "android.mediaQuality.levels";
   private static final String RETRY_RECEIPT_LIFESPAN            = "android.retryReceiptLifespan";
   private static final String RETRY_RESPOND_MAX_AGE             = "android.retryRespondMaxAge";
-  private static final String SENDER_KEY                        = "android.senderKey";
+  private static final String SENDER_KEY                        = "android.senderKey.4";
+  private static final String RETRY_RECEIPTS                    = "android.retryReceipts";
+  private static final String SUGGEST_SMS_BLACKLIST             = "android.suggestSmsBlacklist";
+  private static final String ANNOUNCEMENT_GROUPS               = "android.announcementGroups";
+  private static final String FORWARD_MULTIPLE_MESSAGES         = "android.forward.multiple.messages";
 
   /**
    * We will only store remote values for flags in this set. If you want a flag to be controllable
@@ -110,7 +115,11 @@ public final class FeatureFlags {
       MEDIA_QUALITY_LEVELS,
       RETRY_RECEIPT_LIFESPAN,
       RETRY_RESPOND_MAX_AGE,
-      SENDER_KEY
+      SENDER_KEY,
+      RETRY_RECEIPTS,
+      SUGGEST_SMS_BLACKLIST,
+      ANNOUNCEMENT_GROUPS,
+      FORWARD_MULTIPLE_MESSAGES
   );
 
   @VisibleForTesting
@@ -156,7 +165,10 @@ public final class FeatureFlags {
       MP4_GIF_SEND_SUPPORT,
       MEDIA_QUALITY_LEVELS,
       RETRY_RECEIPT_LIFESPAN,
-      RETRY_RESPOND_MAX_AGE
+      RETRY_RESPOND_MAX_AGE,
+      SUGGEST_SMS_BLACKLIST,
+      RETRY_RECEIPTS,
+      SENDER_KEY
   );
 
   /**
@@ -199,7 +211,7 @@ public final class FeatureFlags {
     Log.i(TAG, "init() " + REMOTE_VALUES.toString());
   }
 
-  public static synchronized void refreshIfNecessary() {
+  public static void refreshIfNecessary() {
     long timeSinceLastFetch = System.currentTimeMillis() - SignalStore.remoteConfigValues().getLastFetchTime();
 
     if (timeSinceLastFetch < 0 || timeSinceLastFetch > FETCH_INTERVAL) {
@@ -208,6 +220,12 @@ public final class FeatureFlags {
     } else {
       Log.i(TAG, "Skipping remote config refresh. Refreshed " + timeSinceLastFetch + " ms ago.");
     }
+  }
+
+  @WorkerThread
+  public static void refreshSync() throws IOException {
+    Map<String, Object> config = ApplicationDependencies.getSignalServiceAccountManager().getRemoteConfig();
+    FeatureFlags.update(config);
   }
 
   public static synchronized void update(@NonNull Map<String, Object> config) {
@@ -333,8 +351,13 @@ public final class FeatureFlags {
     return getBoolean(MP4_GIF_SEND_SUPPORT, false);
   }
 
-  public static @Nullable String getMediaQualityLevels() {
+  public static @NonNull String getMediaQualityLevels() {
     return getString(MEDIA_QUALITY_LEVELS, "");
+  }
+
+  /** Whether or not sending or responding to retry receipts is enabled. */
+  public static boolean retryReceipts() {
+    return getBoolean(RETRY_RECEIPTS, false);
   }
 
   /** How long to wait before considering a retry to be a failure. */
@@ -350,6 +373,21 @@ public final class FeatureFlags {
   /** Whether or not sending using sender key is enabled. */
   public static boolean senderKey() {
     return getBoolean(SENDER_KEY, false);
+  }
+
+  /** Whether or not showing the announcement group setting in the UI is enabled . */
+  public static boolean announcementGroups() {
+    return getBoolean(ANNOUNCEMENT_GROUPS, false);
+  }
+
+  /** A comma-delimited list of country codes that should not be told about SMS during onboarding. */
+  public static @NonNull String suggestSmsBlacklist() {
+    return getString(SUGGEST_SMS_BLACKLIST, "");
+  }
+
+  /** Whether the user is able to forward multiple messages at once */
+  public static boolean forwardMultipleMessages() {
+    return getBoolean(FORWARD_MULTIPLE_MESSAGES, false);
   }
 
   /** Only for rendering debug info. */

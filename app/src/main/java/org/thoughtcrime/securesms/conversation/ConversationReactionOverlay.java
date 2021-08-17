@@ -16,7 +16,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.RelativeLayout;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -151,7 +150,7 @@ public final class ConversationReactionOverlay extends RelativeLayout {
   public void show(@NonNull Activity activity,
                    @NonNull MaskView.MaskTarget maskTarget,
                    @NonNull Recipient conversationRecipient,
-                   @NonNull MessageRecord messageRecord,
+                   @NonNull ConversationMessage conversationMessage,
                    int maskPaddingBottom,
                    @NonNull PointF lastSeenDownPoint)
   {
@@ -160,12 +159,12 @@ public final class ConversationReactionOverlay extends RelativeLayout {
       return;
     }
 
-    this.messageRecord         = messageRecord;
+    this.messageRecord         = conversationMessage.getMessageRecord();
     this.conversationRecipient = conversationRecipient;
     overlayState               = OverlayState.UNINITAILIZED;
     selected                   = -1;
 
-    setupToolbarMenuItems();
+    setupToolbarMenuItems(conversationMessage);
     setupSelectedEmoji();
 
     if (Build.VERSION.SDK_INT >= 21) {
@@ -228,8 +227,8 @@ public final class ConversationReactionOverlay extends RelativeLayout {
     hideInternal(hideAnimatorSet, onHideListener);
   }
 
-  public void hideAllButMask() {
-    hideInternal(hideAllButMaskAnimatorSet, null);
+  public void hideForReactWithAny() {
+    hideInternal(hideAnimatorSet, null);
   }
 
   public void hideMask() {
@@ -505,8 +504,8 @@ public final class ConversationReactionOverlay extends RelativeLayout {
                  .orElse(null);
   }
 
-  private void setupToolbarMenuItems() {
-    MenuState menuState = MenuState.getMenuState(conversationRecipient, Collections.singleton(messageRecord), false);
+  private void setupToolbarMenuItems(@NonNull ConversationMessage conversationMessage) {
+    MenuState menuState = MenuState.getMenuState(conversationRecipient, conversationMessage.getMultiselectCollection().toSet(), false);
 
     toolbar.getMenu().findItem(R.id.action_copy).setVisible(menuState.shouldShowCopyAction());
     toolbar.getMenu().findItem(R.id.action_download).setVisible(menuState.shouldShowSaveAttachmentAction());

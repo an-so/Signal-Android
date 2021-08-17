@@ -8,6 +8,7 @@ import com.annimon.stream.OptionalLong;
 import org.signal.ringrtc.GroupCall;
 import org.thoughtcrime.securesms.components.sensors.Orientation;
 import org.thoughtcrime.securesms.components.webrtc.BroadcastVideoSink;
+import org.thoughtcrime.securesms.components.webrtc.EglBaseWrapper;
 import org.thoughtcrime.securesms.events.CallParticipant;
 import org.thoughtcrime.securesms.events.CallParticipantId;
 import org.thoughtcrime.securesms.events.WebRtcViewModel;
@@ -17,7 +18,6 @@ import org.thoughtcrime.securesms.ringrtc.Camera;
 import org.thoughtcrime.securesms.ringrtc.CameraState;
 import org.thoughtcrime.securesms.ringrtc.RemotePeer;
 import org.thoughtcrime.securesms.service.webrtc.WebRtcActionProcessor;
-import org.webrtc.EglBase;
 
 import java.util.Collection;
 
@@ -110,6 +110,16 @@ public class WebRtcServiceStateBuilder {
       toBuild.orientation = orientation;
       return this;
     }
+
+    public @NonNull LocalDeviceStateBuilder setLandscapeEnabled(boolean isLandscapeEnabled) {
+      toBuild.isLandscapeEnabled = isLandscapeEnabled;
+      return this;
+    }
+
+    public @NonNull LocalDeviceStateBuilder setDeviceOrientation(@NonNull Orientation deviceOrientation) {
+      toBuild.deviceOrientation = deviceOrientation;
+      return this;
+    }
   }
 
   public class CallSetupStateBuilder {
@@ -167,7 +177,7 @@ public class WebRtcServiceStateBuilder {
       return WebRtcServiceStateBuilder.this.build();
     }
 
-    public @NonNull VideoStateBuilder eglBase(@Nullable EglBase eglBase) {
+    public @NonNull VideoStateBuilder eglBase(@Nullable EglBaseWrapper eglBase) {
       toBuild.eglBase = eglBase;
       return this;
     }

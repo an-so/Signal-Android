@@ -3,7 +3,6 @@ package org.thoughtcrime.securesms.conversation;
 import android.app.Activity;
 import android.graphics.PointF;
 import android.view.MotionEvent;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -41,10 +40,10 @@ final class ConversationReactionDelegate {
   void show(@NonNull Activity activity,
             @NonNull MaskView.MaskTarget maskTarget,
             @NonNull Recipient conversationRecipient,
-            @NonNull MessageRecord messageRecord,
+            @NonNull ConversationMessage conversationMessage,
             int maskPaddingBottom)
   {
-    resolveOverlay().show(activity, maskTarget, conversationRecipient, messageRecord, maskPaddingBottom, lastSeenDownPoint);
+    resolveOverlay().show(activity, maskTarget, conversationRecipient, conversationMessage, maskPaddingBottom, lastSeenDownPoint);
   }
 
   void showMask(@NonNull MaskView.MaskTarget maskTarget, int maskPaddingTop, int maskPaddingBottom) {
@@ -55,8 +54,8 @@ final class ConversationReactionDelegate {
     overlayStub.get().hide();
   }
 
-  void hideAllButMask() {
-    overlayStub.get().hideAllButMask();
+  void hideForReactWithAny() {
+    overlayStub.get().hideForReactWithAny();
   }
 
   void hideMask() {

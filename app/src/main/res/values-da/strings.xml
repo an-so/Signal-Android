@@ -54,7 +54,6 @@
   <string name="DraftDatabase_Draft_quote_snippet">(svar)</string>
   <!--AttachmentKeyboard-->
   <string name="AttachmentKeyboard_gallery">Billeder</string>
-  <string name="AttachmentKeyboard_gif">GIF</string>
   <string name="AttachmentKeyboard_file">Fil</string>
   <string name="AttachmentKeyboard_contact">Kontakt</string>
   <string name="AttachmentKeyboard_location">Lokation</string>
@@ -242,9 +241,6 @@
   <string name="ConversationActivity_full">Fuld</string>
   <string name="ConversationActivity_error_sending_media">Fejl ved afsendelse af medier</string>
   <string name="ConversationActivity__reported_as_spam_and_blocked">Rapporteret som spam og blokeret.</string>
-  <string name="ConversationActivity_gifs_have_moved">GIF\'er er flyttet</string>
-  <string name="ConversationActivity_look_for_gifs_next_to_emoji_and_stickers">Se efter GIF\'er ved siden af emoji og klistermærker.</string>
-  <string name="ConversationActivity__gifs_are_now_here">GIF\'er er nu her.</string>
   <!--ConversationAdapter-->
   <plurals name="ConversationAdapter_n_unread_messages">
     <item quantity="one">%d ulæst besked</item>
@@ -435,6 +431,7 @@
   <string name="AddToGroupActivity_add_to_groups">Tilføj til grupper</string>
   <string name="AddToGroupActivity_this_person_cant_be_added_to_legacy_groups">Personen kan ikke tilføjes forældede grupper</string>
   <string name="AddToGroupActivity_add">Tilføj</string>
+  <string name="AddToGroupActivity_add_to_a_group">Tilføj til en gruppe</string>
   <!--ChooseNewAdminActivity-->
   <string name="ChooseNewAdminActivity_choose_new_admin">Vælg ny administrator</string>
   <string name="ChooseNewAdminActivity_done">Udført</string>
@@ -565,6 +562,7 @@
     <item quantity="other">Tilføj %3$d medlemmer til \"%2$s\"?</item>
   </plurals>
   <string name="AddMembersActivity__add">Tilføj</string>
+  <string name="AddMembersActivity__add_members">Tilføj medlemmer</string>
   <!--AddGroupDetailsFragment-->
   <string name="AddGroupDetailsFragment__name_this_group">Navngiv gruppen</string>
   <string name="AddGroupDetailsFragment__create_group">Opret gruppe</string>
@@ -657,32 +655,11 @@
   <string name="ManageProfileFragment_your_username">Dit brugernavn</string>
   <string name="ManageProfileFragment_failed_to_set_avatar">Avataren kunne ikke opsættes</string>
   <!--ManageRecipientActivity-->
-  <string name="ManageRecipientActivity_add_to_system_contacts">Tilføj til dine kontakter</string>
-  <string name="ManageRecipientActivity_this_person_is_in_your_contacts">Personen findes i dine kontakter</string>
-  <string name="ManageRecipientActivity_disappearing_messages">Beskeder med tidsudløb</string>
-  <string name="ManageRecipientActivity_chat_color">Chatfarve</string>
-  <string name="ManageRecipientActivity_chat_wallpaper">Chatbaggrund</string>
-  <string name="ManageRecipientActivity_block">Blokér</string>
-  <string name="ManageRecipientActivity_unblock">Fjern blokering</string>
-  <string name="ManageRecipientActivity_view_safety_number">Vis sikkerhedsnummer</string>
-  <string name="ManageRecipientActivity_mute_notifications">Udsæt notifikationer</string>
-  <string name="ManageRecipientActivity_custom_notifications">Brugerdefinerede notifikationer</string>
-  <string name="ManageRecipientActivity_until_s">Indtil %1$s</string>
-  <string name="ManageRecipientActivity_always">Altid</string>
-  <string name="ManageRecipientActivity_off">Deaktiveret</string>
-  <string name="ManageRecipientActivity_on">Aktiveret</string>
-  <string name="ManageRecipientActivity_add_to_a_group">Tilføj til en gruppe</string>
-  <string name="ManageRecipientActivity_view_all_groups">Vis alle grupper</string>
-  <string name="ManageRecipientActivity_see_all">Se alle</string>
   <string name="ManageRecipientActivity_no_groups_in_common">Ingen grupper tilfælles</string>
   <plurals name="ManageRecipientActivity_d_groups_in_common">
     <item quantity="one">%d gruppe tilfælles</item>
     <item quantity="other">%d grupper tilfælles</item>
   </plurals>
-  <string name="ManageRecipientActivity_message_description">Besked</string>
-  <string name="ManageRecipientActivity_voice_call_description">Taleopkald</string>
-  <string name="ManageRecipientActivity_insecure_voice_call_description">Ukrypteret taleopkald</string>
-  <string name="ManageRecipientActivity_video_call_description">Videoopkald</string>
   <plurals name="GroupMemberList_invited">
     <item quantity="one">%1$s inviterede 1 person</item>
     <item quantity="other">%1$s inviterede %2$d personer</item>
@@ -826,6 +803,7 @@
   <string name="MediaOverviewActivity_audio">Lyd</string>
   <string name="MediaOverviewActivity_video">Video</string>
   <string name="MediaOverviewActivity_image">Billede</string>
+  <string name="MediaOverviewActivity_voice_message">Talebesked</string>
   <string name="MediaOverviewActivity_sent_by_s">Sendt af %1$s</string>
   <string name="MediaOverviewActivity_sent_by_you">Sendt af dig</string>
   <string name="MediaOverviewActivity_sent_by_s_to_s">Sendt af %1$s til %2$s</string>
@@ -866,6 +844,8 @@
   <!--MediaSendActivity-->
   <string name="MediaSendActivity_add_a_caption">Tilføj en billedtekst…</string>
   <string name="MediaSendActivity_an_item_was_removed_because_it_exceeded_the_size_limit">Et element blev fjernet, fordi det oversteg max. grænsen</string>
+  <string name="MediaSendActivity_an_item_was_removed_because_it_had_an_unknown_type">Et element blev fjernet, fordi det havde en ukendt type</string>
+  <string name="MediaSendActivity_an_item_was_removed_because_it_exceeded_the_size_limit_or_had_an_unknown_type">Et element blev fjernet, fordi det overskred størrelsesgrænsen eller havde en ukendt type</string>
   <string name="MediaSendActivity_camera_unavailable">Kamera utilgængeligt</string>
   <string name="MediaSendActivity_message_to_s">Besked til %s</string>
   <string name="MediaSendActivity_message">Besked</string>
@@ -881,6 +861,7 @@
   <!--MediaRepository-->
   <string name="MediaRepository_all_media">Alle mediefiler</string>
   <string name="MediaRepository__camera">Kamera</string>
+  <!--MessageDecryptionUtil-->
   <!--MessageRecord-->
   <string name="MessageRecord_unknown">Ukendt</string>
   <string name="MessageRecord_message_encrypted_with_a_legacy_protocol_version_that_is_no_longer_supported">Modtog en besked krypteret med en ældre version af Signal, der ikke længere understøttes. Bed venligst afsenderen om at opgradere til den nyeste version og sende beskeden igen.</string>
@@ -996,6 +977,7 @@
   <string name="MessageRecord_you_changed_who_can_edit_group_membership_to_s">Du ændrede, hvem som kan redigere medlemskab af gruppen til \"%1$s\"</string>
   <string name="MessageRecord_s_changed_who_can_edit_group_membership_to_s">%1$s ændrede, hvem som kan redigere medlemskab af gruppen til \"%2$s\"</string>
   <string name="MessageRecord_who_can_edit_group_membership_has_been_changed_to_s">Hvem som kan redigere medlemskaber af gruppen er blevet ændret til \"%1$s\"</string>
+  <!--GV2 announcement group change-->
   <!--GV2 group link invite access level change-->
   <string name="MessageRecord_you_turned_on_the_group_link_with_admin_approval_off">Du aktiverede gruppelinket med administratorgodkendelse slået fra</string>
   <string name="MessageRecord_you_turned_on_the_group_link_with_admin_approval_on">Du aktiverede gruppelinket med administratorgodkendelse slået til</string>
@@ -1040,6 +1022,7 @@
   <string name="MessageRecord_you_marked_your_safety_number_with_s_verified_from_another_device">Du har markeret dit sikkerhedsnummer med %s som verificeret fra en anden enhed</string>
   <string name="MessageRecord_you_marked_your_safety_number_with_s_unverified">Du har markeret dit sikkerhedsnummer med %s som ubekræftet</string>
   <string name="MessageRecord_you_marked_your_safety_number_with_s_unverified_from_another_device">Du har markeret dit sikkerhedsnummer med %s som ubekræftet fra en anden enhed</string>
+  <string name="MessageRecord_a_message_from_s_couldnt_be_delivered">En besked fra %s kunne ikke leveres</string>
   <!--Group Calling update messages-->
   <string name="MessageRecord_s_started_a_group_call_s">%1$s startede en gruppesamtale · %2$s</string>
   <string name="MessageRecord_s_is_in_the_group_call_s">%1$s er med i gruppesamtalen · %2$s</string>
@@ -1176,6 +1159,8 @@
   <string name="RecaptchaRequiredBottomSheetFragment_verify_to_continue_messaging">Bekræft for at fortsætte beskedskrivning</string>
   <string name="RecaptchaRequiredBottomSheetFragment_to_help_prevent_spam_on_signal">For at hjælpe med at forhindre spam på Signal, skal du gennemføre bekræftelsen.</string>
   <string name="RecaptchaRequiredBottomSheetFragment_after_verifying_you_can_continue_messaging">Efter bekræftelse kan du fortsætte med at sende beskeder. Alle beskeder, der er sat på pause, sendes automatisk.</string>
+  <!--Recipient-->
+  <string name="Recipient_you">Dig</string>
   <!--RecipientPreferencesActivity-->
   <string name="RecipientPreferenceActivity_block">Blokér</string>
   <string name="RecipientPreferenceActivity_unblock">Fjern blokering</string>
@@ -1197,13 +1182,11 @@
   <string name="WebRtcCallActivity__signal_s">Signal %1$s</string>
   <string name="WebRtcCallActivity__calling">Ringer…</string>
   <!--WebRtcCallView-->
-  <string name="WebRtcCallView__signal_voice_call">Signal taleopkald…</string>
-  <string name="WebRtcCallView__signal_video_call">Signal videoopkald…</string>
+  <string name="WebRtcCallView__signal_call">Signal-opkald</string>
   <string name="WebRtcCallView__start_call">Foretag opkald</string>
   <string name="WebRtcCallView__join_call">Deltag i opkaldet</string>
   <string name="WebRtcCallView__call_is_full">Samtalen er fuld</string>
   <string name="WebRtcCallView__the_maximum_number_of_d_participants_has_been_Reached_for_this_call">Det maksimale antal på %1$d deltagere er nået til dette opkald. Prøv igen senere.</string>
-  <string name="WebRtcCallView__s_group_call">\"%1$s\" Gruppe opkald</string>
   <string name="WebRtcCallView__view_participants_list">Vis deltagere</string>
   <string name="WebRtcCallView__your_video_is_off">Din video er slået fra</string>
   <string name="WebRtcCallView__reconnecting">Genopretter forbindelse…</string>
@@ -1217,6 +1200,10 @@
     <item quantity="one">%1$s, %2$s, og %3$d andre deltager i samtalen</item>
     <item quantity="other">%1$s, %2$s, og %3$d andre deltager i samtalen</item>
   </plurals>
+  <string name="WebRtcCallView__speaker">Højttaler</string>
+  <string name="WebRtcCallView__camera">Kamera</string>
+  <string name="WebRtcCallView__mute">Déaktiver lyd</string>
+  <string name="WebRtcCallView__end_call">Afslut opkald</string>
   <!--CallParticipantsListDialog-->
   <plurals name="CallParticipantsListDialog_in_this_call_d_people">
     <item quantity="one">I dette opkald · %1$d person</item>
@@ -1358,7 +1345,6 @@ Modtog en nøgle besked, for en ugyldig protokol-version
   <string name="SubmitDebugLogActivity_success">Fuldført!</string>
   <string name="SubmitDebugLogActivity_copy_this_url_and_add_it_to_your_issue">Kopier denne URL og tilføj den til din fejlrapport, eller til support email:\n\n<b>%1$s</b></string>
   <string name="SubmitDebugLogActivity_share">Del</string>
-  <string name="SubmitDebugLogActivity_this_log_will_be_posted_publicly_online">Denne log vil blive offentliggjort online og vises for bidragsydere. Du kan undersøge og redigere den, inden den udsendes.</string>
   <!--SupportEmailUtil-->
   <string name="SupportEmailUtil_filter">Filter:</string>
   <string name="SupportEmailUtil_device_info">Enheds info:</string>
@@ -1650,6 +1636,7 @@ Modtog en nøgle besked, for en ugyldig protokol-version
   <string name="conversation_fragment__scroll_to_the_bottom_content_description">Scroll til bunden</string>
   <!--safety_number_change_dialog-->
   <string name="safety_number_change_dialog__safety_number_changes">Sikkerhedsnummer ændringer</string>
+  <string name="safety_number_change_dialog__accept">Godkend</string>
   <string name="safety_number_change_dialog__send_anyway">Send alligevel</string>
   <string name="safety_number_change_dialog__call_anyway">Ring alligevel</string>
   <string name="safety_number_change_dialog__join_call">Deltag i samtalen</string>
@@ -1727,8 +1714,6 @@ Modtog en nøgle besked, for en ugyldig protokol-version
   <string name="giphy_activity_toolbar__search_gifs">Søg i GIF\'er</string>
   <!--giphy_fragment-->
   <string name="giphy_fragment__nothing_found">Fandt ingenting</string>
-  <!--log_submit_activity-->
-  <string name="log_submit_activity__this_log_will_be_posted_online">Loggen vil blive vist offentligt online for andre der bidrager. Du kan validere og redigere den inden du deler den</string>
   <!--database_migration_activity-->
   <string name="database_migration_activity__would_you_like_to_import_your_existing_text_messages">Vil du importere dine eksisterende beskeder til Signals krypterede database?</string>
   <string name="database_migration_activity__the_default_system_database_will_not_be_modified">Standard system databasen vil ikke blive ændret</string>
@@ -1757,6 +1742,8 @@ Modtog en nøgle besked, for en ugyldig protokol-version
   <string name="prompt_mms_activity__to_send_media_and_group_messages_tap_ok">For at sende multimedie- og gruppebeskeder, tap \"OK\" og sæt de nødvendige indstillinger. MMS indstillingerne for din teleoperatør kan ofte findes ved at søge på \"din operatørs APN\". Dette skal kun gøres én gang</string>
   <!--BadDecryptLearnMoreDialog-->
   <string name="BadDecryptLearnMoreDialog_delivery_issue">Leveringsproblem</string>
+  <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">En besked, klistermærke, reaktion eller læsekvittering kunne ikke leveres til dig fra %s. De har muligvis forsøgt at sende det direkte til dig eller i en gruppe.</string>
+  <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">En besked, klistermærke, reaktion eller læsekvittering kunne ikke leveres til dig fra %s.</string>
   <!--profile_create_activity-->
   <string name="CreateProfileActivity_first_name_required">Fornavn (krævet)</string>
   <string name="CreateProfileActivity_last_name_optional">Efternavn (frivilligt)</string>
@@ -1813,6 +1800,7 @@ Modtog en nøgle besked, for en ugyldig protokol-version
   <string name="message_details_recipient_header__delivered_to">Leveret til</string>
   <string name="message_details_recipient_header__read_by">Læst af</string>
   <string name="message_details_recipient_header__not_sent">Ikke sendt</string>
+  <string name="message_details_recipient_header__viewed">Set af</string>
   <!--message_Details_recipient-->
   <string name="message_details_recipient__failed_to_send">Kunne ikke sendes</string>
   <string name="message_details_recipient__new_safety_number">Nyt sikkerhedsnummer</string>
@@ -1867,6 +1855,7 @@ Modtog en nøgle besked, for en ugyldig protokol-version
   <string name="ReactWithAnyEmojiBottomSheetDialogFragment__symbols">Symboler</string>
   <string name="ReactWithAnyEmojiBottomSheetDialogFragment__flags">Flag</string>
   <string name="ReactWithAnyEmojiBottomSheetDialogFragment__emoticons">Humørikoner</string>
+  <string name="ReactWithAnyEmojiBottomSheetDialogFragment__no_results_found">Ingen fundne resultater</string>
   <!--arrays.xml-->
   <string name="arrays__use_default">Brug standard</string>
   <string name="arrays__use_custom">Brug tilpasset</string>
@@ -2033,6 +2022,8 @@ Modtog en nøgle besked, for en ugyldig protokol-version
   <string name="preferences_data_and_storage__calls">Opkald</string>
   <string name="preferences_data_and_storage__use_less_data_for_calls">Brug færre data til opkald</string>
   <string name="preferences_data_and_storage__never">Aldrig</string>
+  <string name="preferences_data_and_storage__wifi_and_mobile_data">WiFi og mobildata</string>
+  <string name="preferences_data_and_storage__mobile_data_only">Kun mobildata</string>
   <string name="preference_data_and_storage__using_less_data_may_improve_calls_on_bad_networks">Brug af færre data kan forbedre opkald på dårlige netværk</string>
   <string name="preferences_notifications__messages">Beskeder</string>
   <string name="preferences_notifications__events">Begivenheder</string>
@@ -2057,6 +2048,7 @@ Modtog en nøgle besked, for en ugyldig protokol-version
   <string name="preferences_off">Deaktiveret</string>
   <string name="preferences_on">Aktiveret</string>
   <string name="preferences_proxy_address">Proxy-adresse</string>
+  <string name="preferences_only_use_a_proxy_if">Brug kun en proxy, hvis du ikke er i stand til at oprette forbindelse til Signal på mobildata eller Wi-Fi.</string>
   <string name="preferences_share">Del</string>
   <string name="preferences_save">Gem</string>
   <string name="preferences_connecting_to_proxy">Forbinder til proxy…</string>
@@ -2640,7 +2632,7 @@ Modtog en nøgle besked, for en ugyldig protokol-version
   <string name="RecipientBottomSheet_add_to_a_group">Tilføj til en gruppe</string>
   <string name="RecipientBottomSheet_add_to_another_group">Tilføj til anden gruppe</string>
   <string name="RecipientBottomSheet_view_safety_number">Vis sikkerhedsnummer</string>
-  <string name="RecipientBottomSheet_make_group_admin">Gør til gruppeadministrator</string>
+  <string name="RecipientBottomSheet_make_admin">Gør til administrator</string>
   <string name="RecipientBottomSheet_remove_as_admin">Fjern som administrator</string>
   <string name="RecipientBottomSheet_remove_from_group">Fjern fra gruppe</string>
   <string name="RecipientBottomSheet_message_description">Besked</string>
@@ -2741,6 +2733,7 @@ Modtog en nøgle besked, for en ugyldig protokol-version
   <!--ShareActivity-->
   <string name="ShareActivity__share">Del</string>
   <string name="ShareActivity__send">Send</string>
+  <string name="ShareActivity__comma_s">. %1$s</string>
   <string name="ShareActivity__sharing_to_multiple_chats_is">Deling til flere chats understøttes kun til Signal-beskeder</string>
   <!--MultiShareDialogs-->
   <string name="MultiShareDialogs__failed_to_send_to_some_users">Det kunne ikke sendes til nogle brugere</string>
@@ -2977,6 +2970,8 @@ Modtog en nøgle besked, for en ugyldig protokol-version
   <string name="ChatColorsMegaphone__we_switched_up_chat_colors">Vi har skiftet chatfarver for at give dig flere muligheder og gøre chat nemmere at læse.</string>
   <string name="ChatColorsMegaphone__appearance">Udseende</string>
   <string name="ChatColorsMegaphone__not_now">Ikke nu</string>
+  <!--AddAProfilePhotoMegaphone-->
+  <string name="AddAProfilePhotoMegaphone__not_now">Ikke nu</string>
   <!--KeyboardPagerFragment-->
   <string name="KeyboardPagerFragment_emoji">Smiley</string>
   <string name="KeyboardPagerFragment_open_emoji_search">Åbn emoji-søgning</string>
@@ -2994,5 +2989,59 @@ Modtog en nøgle besked, for en ugyldig protokol-version
   <string name="StickerSearchDialogFragment_no_results_found">Ingen fundne resultater</string>
   <string name="EmojiSearchFragment__no_results_found">Ingen fundne resultater</string>
   <string name="NotificationsSettingsFragment__unknown_ringtone">Ukendt ringetone</string>
+  <!--ConversationSettingsFragment-->
+  <string name="ConversationSettingsFragment__message">Besked</string>
+  <string name="ConversationSettingsFragment__video">Video</string>
+  <string name="ConversationSettingsFragment__audio">Lyd</string>
+  <string name="ConversationSettingsFragment__call">Ring op </string>
+  <string name="ConversationSettingsFragment__mute">Déaktiver lyd</string>
+  <string name="ConversationSettingsFragment__muted">Udsat</string>
+  <string name="ConversationSettingsFragment__search">Søg</string>
+  <string name="ConversationSettingsFragment__disappearing_messages">Forsvindende beskeder</string>
+  <string name="ConversationSettingsFragment__view_safety_number">Vis sikkerhedsnummer</string>
+  <string name="ConversationSettingsFragment__block">Blokér</string>
+  <string name="ConversationSettingsFragment__block_group">Blokér gruppe</string>
+  <string name="ConversationSettingsFragment__unblock">Fjern blokering</string>
+  <string name="ConversationSettingsFragment__unblock_group">Ophæv blokering af gruppe</string>
+  <string name="ConversationSettingsFragment__add_to_a_group">Tilføj til en gruppe</string>
+  <string name="ConversationSettingsFragment__see_all">Se alle</string>
+  <string name="ConversationSettingsFragment__add_members">Tilføj medlemmer</string>
+  <string name="ConversationSettingsFragment__permissions">Tilladelser</string>
+  <string name="ConversationSettingsFragment__group_link">Gruppelink</string>
+  <string name="ConversationSettingsFragment__unmute">Aktivér lyd</string>
+  <string name="ConversationSettingsFragment__phone_number">Telefonnummer</string>
+  <!--PermissionsSettingsFragment-->
+  <string name="PermissionsSettingsFragment__add_members">Tilføj medlemmer</string>
+  <string name="PermissionsSettingsFragment__edit_group_info">Rediger gruppeinformation</string>
+  <string name="PermissionsSettingsFragment__all_members">Alle medlemmer</string>
+  <string name="PermissionsSettingsFragment__only_admins">Kun administratorer</string>
+  <string name="PermissionsSettingsFragment__who_can_add_new_members">Hvem kan tilføje nye medlemmer?</string>
+  <string name="PermissionsSettingsFragment__who_can_edit_this_groups_info">Hvem kan redigere gruppens information?</string>
+  <!--SoundsAndNotificationsSettingsFragment-->
+  <string name="SoundsAndNotificationsSettingsFragment__mute_notifications">Udsæt meddelelser</string>
+  <string name="SoundsAndNotificationsSettingsFragment__not_muted">Ikke udsat</string>
+  <string name="SoundsAndNotificationsSettingsFragment__mentions">Omtaler</string>
+  <string name="SoundsAndNotificationsSettingsFragment__custom_notifications">Brugerdefinerede notifikationer</string>
+  <!--StickerKeyboard-->
+  <!--PlaybackSpeedToggleTextView-->
+  <!--PaymentRecipientSelectionFragment-->
+  <!--NewConversationActivity-->
+  <string name="NewConversationActivity__new_message">Ny besked</string>
+  <!--ContactFilterView-->
+  <!--VoiceNotePlayerView-->
+  <string name="VoiceNotePlayerView__s_dot_s">%1$s - %2$s</string>
+  <!--AvatarPickerFragment-->
+  <string name="AvatarPickerFragment__camera">Kamera</string>
+  <string name="AvatarPickerFragment__photo">Billede</string>
+  <string name="AvatarPickerFragment__save">Gem</string>
+  <string name="AvatarPickerFragment__edit">Redigér</string>
+  <!--TextAvatarCreationFragment-->
+  <string name="TextAvatarCreationFragment__preview">Eksempel</string>
+  <string name="TextAvatarCreationFragment__done">Udført</string>
+  <string name="TextAvatarCreationFragment__color">Farve</string>
+  <!--VectorAvatarCreationFragment-->
+  <!--ContactSelectionListItem-->
+  <string name="ContactSelectionListItem__sms">SMS</string>
+  <!--DSLSettingsToolbar-->
   <!--EOF-->
 </resources>

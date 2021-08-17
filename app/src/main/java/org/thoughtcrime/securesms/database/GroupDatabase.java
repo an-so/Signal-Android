@@ -18,10 +18,14 @@ import org.signal.storageservice.protos.groups.AccessControl;
 import org.signal.storageservice.protos.groups.Member;
 import org.signal.storageservice.protos.groups.local.DecryptedGroup;
 import org.signal.storageservice.protos.groups.local.DecryptedGroupChange;
+import org.signal.storageservice.protos.groups.local.EnabledState;
 import org.signal.zkgroup.InvalidInputException;
 import org.signal.zkgroup.groups.GroupMasterKey;
 import org.thoughtcrime.securesms.crypto.SenderKeyUtil;
 import org.thoughtcrime.securesms.database.helpers.SQLCipherOpenHelper;
+import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
+import org.thoughtcrime.securesms.groups.v2.processing.GroupsV2StateProcessor;
+import org.thoughtcrime.securesms.jobs.RequestGroupV2InfoJob;
 import org.whispersystems.signalservice.api.push.DistributionId;
 import org.thoughtcrime.securesms.groups.GroupAccessControl;
 import org.thoughtcrime.securesms.groups.GroupId;
@@ -53,6 +57,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public final class GroupDatabase extends Database {
 
@@ -169,6 +175,20 @@ private static final String[] GROUP_PROJECTION = {
     }
   }
 
+  public Optional<GroupRecord> getGroupByDistributionId(@NonNull DistributionId distributionId) {
+    SQLiteDatabase db    = databaseHelper.getReadableDatabase();
+    String         query = DISTRIBUTION_ID + " = ?";
+    String[]       args  = SqlUtil.buildArgs(distributionId);
+
+    try (Cursor cursor = db.query(TABLE_NAME, null, query, args, null, null, null)) {
+      if (cursor.moveToFirst()) {
+        return getGroup(cursor);
+      } else {
+        return Optional.absent();
+      }
+    }
+  }
+
   /**
    * Removes the specified members from the list of 'unmigrated V1 members' -- the list of members
    * that were either dropped or had to be invited when migrating the group from V1->V2.
@@ -241,7 +261,7 @@ private static final String[] GROUP_PROJECTION = {
     return noMetadata && noMembers;
   }
 
-  public Reader getGroupsFilteredByTitle(String constraint, boolean includeInactive, boolean excludeV1) {
+  public Reader getGroupsFilteredByTitle(String constraint, boolean includeInactive, boolean excludeV1, boolean excludeMms) {
     String   query;
     String[] queryArgs;
 
@@ -255,6 +275,10 @@ private static final String[] GROUP_PROJECTION = {
 
     if (excludeV1) {
       query += " AND " + EXPECTED_V2_ID + " IS NULL";
+    }
+
+    if (excludeMms) {
+      query += " AND " + MMS + " = 0";
     }
 
     Cursor cursor = databaseHelper.getReadableDatabase().query(TABLE_NAME, null, query, queryArgs, null, null, TITLE + " COLLATE NOCASE ASC");
@@ -435,6 +459,47 @@ private static final String[] GROUP_PROJECTION = {
     create(groupId, groupState.getTitle(), Collections.emptyList(), null, null, groupMasterKey, groupState);
 
     return groupId;
+  }
+
+  /**
+   * There was a point in time where we weren't properly responding to group creates on linked devices. This would result in us having a Recipient entry for the
+   * group, but we'd either be missing the group entry, or that entry would be missing a master key. This method fixes this scenario.
+   */
+  public void fixMissingMasterKey(@NonNull GroupMasterKey groupMasterKey) {
+    GroupId.V2 groupId = GroupId.v2(groupMasterKey);
+
+    if (getGroupV1ByExpectedV2(groupId).isPresent()) {
+      Log.w(TAG, "There already exists a V1 group that should be migrated into this group. But if the recipient already exists, there's not much we can do here.");
+    }
+
+    SQLiteDatabase db = databaseHelper.getWritableDatabase();
+
+    db.beginTransaction();
+    try {
+      String        query  = GROUP_ID + " = ?";
+      String[]      args   = SqlUtil.buildArgs(groupId);
+      ContentValues values = new ContentValues();
+
+      values.put(V2_MASTER_KEY, groupMasterKey.serialize());
+
+      int updated = db.update(TABLE_NAME, values, query, args);
+
+      if (updated < 1) {
+        Log.w(TAG, "No group entry. Creating restore placeholder for " + groupId);
+        create(groupMasterKey, DecryptedGroup.newBuilder()
+                                             .setRevision(GroupsV2StateProcessor.RESTORE_PLACEHOLDER_REVISION)
+                                             .build());
+      } else {
+        Log.w(TAG, "Had a group entry, but it was missing a master key. Updated.");
+      }
+
+      db.setTransactionSuccessful();
+    } finally {
+      db.endTransaction();
+    }
+
+    Log.w(TAG, "Scheduling request for latest group info for " + groupId);
+    ApplicationDependencies.getJobManager().add(new RequestGroupV2InfoJob(groupId));
   }
 
   /**
@@ -975,15 +1040,32 @@ private static final String[] GROUP_PROJECTION = {
     }
 
     public @NonNull String getDescription() {
-      if (v2GroupProperties == null) {
-        return "";
-      } else {
+      if (v2GroupProperties != null) {
         return v2GroupProperties.getDecryptedGroup().getDescription();
+      } else {
+        return "";
+      }
+    }
+
+    public boolean isAnnouncementGroup() {
+      if (v2GroupProperties != null) {
+        return v2GroupProperties.getDecryptedGroup().getIsAnnouncementGroup() == EnabledState.ENABLED;
+      } else {
+        return false;
       }
     }
 
     public @NonNull List<RecipientId> getMembers() {
       return members;
+    }
+
+    @WorkerThread
+    public @NonNull List<Recipient> getAdmins() {
+      if (v2GroupProperties != null) {
+        return v2GroupProperties.getAdmins(members.stream().map(Recipient::resolved).collect(Collectors.toList()));
+      } else {
+        return Collections.emptyList();
+      }
     }
 
     /** V1 members that were lost during the V1->V2 migration */
@@ -1147,6 +1229,10 @@ private static final String[] GROUP_PROJECTION = {
       return DecryptedGroupUtil.findMemberByUuid(getDecryptedGroup().getMembersList(), uuid.get())
                                .transform(t -> t.getRole() == Member.Role.ADMINISTRATOR)
                                .or(false);
+    }
+
+    public @NonNull List<Recipient> getAdmins(@NonNull List<Recipient> members) {
+      return members.stream().filter(this::isAdmin).collect(Collectors.toList());
     }
 
     public MemberLevel memberLevel(@NonNull Recipient recipient) {

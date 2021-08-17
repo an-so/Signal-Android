@@ -3,6 +3,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Signal.Transparent" parent="Theme.AppCompat">
+        <item name="android:forceDarkAllowed" tools:targetApi="29">false</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -89,6 +90,7 @@
     </style>
 
     <style name="TextSecure.LightIntroTheme" parent="@style/Theme.AppCompat.Light">
+        <item name="android:forceDarkAllowed" tools:targetApi="29">false</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionModeOverlay">true</item>
@@ -99,6 +101,7 @@
     </style>
 
     <style name="TextSecure.DarkIntroTheme" parent="@style/Theme.AppCompat">
+        <item name="android:forceDarkAllowed" tools:targetApi="29">false</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionModeOverlay">true</item>
@@ -126,9 +129,9 @@
 
     <style name="TextSecure.BaseLightTheme" parent="@style/Theme.MaterialComponents.Light.Bridge">
         <item name="theme_type">light</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="29">false</item>
 
         <item name="search_view_style">@style/Signal.SearchView</item>
-        <item name="search_view_style_dark">@style/Signal.SearchView.Dark</item>
 
         <item name="bottomSheetDialogTheme">@style/Theme.Design.Light.BottomSheetDialog</item>
 
@@ -181,9 +184,9 @@
 
     <style name="TextSecure.BaseDarkTheme" parent="@style/Theme.MaterialComponents.Bridge">
         <item name="theme_type">dark</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="29">false</item>
 
         <item name="search_view_style">@style/Signal.SearchView</item>
-        <item name="search_view_style_dark">@style/Signal.SearchView.Dark</item>
 
         <item name="bottomSheetDialogTheme">@style/Theme.Design.BottomSheetDialog</item>
 
@@ -260,6 +263,18 @@
     <style name="TextSecure.DarkRegistrationTheme" parent="TextSecure.DarkNoActionBar">
     </style>
 
+    <style name="TextSecure.LightNoActionBar.ConversationSettings" parent="TextSecure.LightNoActionBar">
+        <item name="android:windowBackground">@color/transparent_black_20</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="TextSecure.DarkNoActionBar.ConversationSettings" parent="TextSecure.DarkNoActionBar">
+        <item name="android:windowBackground">@color/transparent_black_20</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
     <style name="TextSecure.FullScreenMedia" parent="TextSecure.DarkNoActionBar">
         <item name="android:windowFullscreen">true</item>
     </style>
@@ -301,6 +316,7 @@
     </style>
 
     <style name="TextSecure.DarkTheme.WebRTCCall">
+        <item name="android:forceDarkAllowed" tools:targetApi="29">false</item>
         <item name="android:statusBarColor" tools:ignore="NewApi">@color/core_ultramarine</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowTranslucentStatus">true</item>
@@ -362,12 +378,47 @@
         <item name="backgroundTint">@color/white</item>
     </style>
 
+    <style name="Widget.Signal.ReactWithAny" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="bottomSheetStyle">@style/Widget.Signal.ReactWithAny.BottomSheet</item>
+    </style>
+
+    <style name="Widget.Signal.ReactWithAny.BottomSheet" parent="Widget.MaterialComponents.BottomSheet">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Signal.BottomSheet.Rounded</item>
+        <item name="backgroundTint">@color/react_with_any_background</item>
+    </style>
+
+    <style name="Widget.Signal.FixedRoundedCorners" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="bottomSheetStyle">@style/Widget.Signal.FixedRoundedCorners.BottomSheet</item>
+    </style>
+
+    <style name="Widget.Signal.FixedRoundedCorners.BottomSheet" parent="Widget.MaterialComponents.BottomSheet">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Signal.BottomSheet.Rounded</item>
+        <item name="backgroundTint">@color/signal_background_primary</item>
+    </style>
+
     <style name="ShapeAppearanceOverlay.Signal.BottomSheet.Rounded" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopRight">8dp</item>
-        <item name="cornerSizeTopLeft">8dp</item>
+        <item name="cornerSizeTopRight">18dp</item>
+        <item name="cornerSizeTopLeft">18dp</item>
         <item name="cornerSizeBottomLeft">0dp</item>
         <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.Signal.WallpaperPreview" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">12dp</item>
+        <item name="cornerSizeTopLeft">12dp</item>
+        <item name="cornerSizeBottomLeft">12dp</item>
+        <item name="cornerSizeBottomRight">12dp</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.Signal.Circle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
     </style>
 
     <style name="Widget.Signal.BottomSheet.Rounded" parent="Widget.MaterialComponents.BottomSheet">
@@ -424,6 +475,13 @@
         <item name="android:textColor">@color/core_grey_90</item>
         <item name="chipBackgroundColor">@color/core_grey_05</item>
         <item name="closeIconTint">@color/core_grey_60</item>
+    </style>
+    
+    <style name="ThemeOverlay.Signal.EditProfileInput" parent="ThemeOverlay.MaterialComponents">
+        <item name="colorAccent">@color/signal_accent_primary</item>
+        <item name="colorControlNormal">@color/signal_accent_primary</item>
+        <item name="colorControlHighlight">@color/signal_accent_primary</item>
+        <item name="colorControlActivated">@color/signal_accent_primary</item>
     </style>
 
 </resources>

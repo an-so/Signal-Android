@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
+import androidx.core.app.NotificationChannelCompat;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
@@ -359,7 +360,7 @@ public class NotificationChannels {
       return getMessageVibrate(context);
     }
 
-    return channel.shouldVibrate();
+    return channel.shouldVibrate() && !Arrays.equals(channel.getVibrationPattern(), EMPTY_VIBRATION_PATTERN);
   }
 
   /**
@@ -550,12 +551,9 @@ public class NotificationChannels {
     Set<String> existingChannelIds  = Stream.of(notificationManager.getNotificationChannels()).map(NotificationChannel::getId).collect(Collectors.toSet());
 
     for (NotificationChannel existingChannel : notificationManager.getNotificationChannels()) {
-      if (existingChannel.getId().startsWith(CONTACT_PREFIX) && !customChannelIds.contains(existingChannel.getId())) {
-        Log.i(TAG, "Consistency: Deleting channel '"+ existingChannel.getId() + "' because the DB has no record of it.");
-        notificationManager.deleteNotificationChannel(existingChannel.getId());
-      } else if (existingChannel.getId().startsWith(MESSAGES_PREFIX) &&
-                 Build.VERSION.SDK_INT >= CONVERSATION_SUPPORT_VERSION &&
-                 existingChannel.getConversationId() != null)
+      if ((existingChannel.getId().startsWith(CONTACT_PREFIX) || existingChannel.getId().startsWith(MESSAGES_PREFIX)) &&
+          Build.VERSION.SDK_INT >= CONVERSATION_SUPPORT_VERSION &&
+          existingChannel.getConversationId() != null)
       {
         if (customChannelIds.contains(existingChannel.getId())) {
           continue;
@@ -569,6 +567,9 @@ public class NotificationChannels {
           Log.i(TAG, "Consistency: Conversation channel created outside of app with no matching recipient, deleting channel '" + existingChannel.getId() + "'");
           notificationManager.deleteNotificationChannel(existingChannel.getId());
         }
+      } else if (existingChannel.getId().startsWith(CONTACT_PREFIX) && !customChannelIds.contains(existingChannel.getId())) {
+        Log.i(TAG, "Consistency: Deleting channel '"+ existingChannel.getId() + "' because the DB has no record of it.");
+        notificationManager.deleteNotificationChannel(existingChannel.getId());
       } else if (existingChannel.getId().startsWith(MESSAGES_PREFIX) && !existingChannel.getId().equals(getMessagesChannel(context))) {
         Log.i(TAG, "Consistency: Deleting channel '" + existingChannel.getId() + "' because it's out of date.");
         notificationManager.deleteNotificationChannel(existingChannel.getId());

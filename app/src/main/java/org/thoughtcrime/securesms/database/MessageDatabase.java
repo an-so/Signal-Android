@@ -20,6 +20,7 @@ import org.thoughtcrime.securesms.database.documents.IdentityKeyMismatch;
 import org.thoughtcrime.securesms.database.documents.IdentityKeyMismatchList;
 import org.thoughtcrime.securesms.database.documents.NetworkFailure;
 import org.thoughtcrime.securesms.database.helpers.SQLCipherOpenHelper;
+import org.thoughtcrime.securesms.database.model.MessageId;
 import org.thoughtcrime.securesms.database.model.MessageRecord;
 import org.thoughtcrime.securesms.database.model.ReactionRecord;
 import org.thoughtcrime.securesms.database.model.SmsMessageRecord;
@@ -59,6 +60,9 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
 
   private static final String TAG = Log.tag(MessageDatabase.class);
 
+  protected static final String   THREAD_ID_WHERE      = THREAD_ID + " = ?";
+  protected static final String[] THREAD_ID_PROJECTION = new String[] { THREAD_ID };
+
   public MessageDatabase(Context context, SQLCipherOpenHelper databaseHelper) {
     super(context, databaseHelper);
   }
@@ -76,7 +80,6 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
   public abstract long getThreadIdForMessage(long id);
   public abstract int getMessageCountForThread(long threadId);
   public abstract int getMessageCountForThread(long threadId, long beforeTime);
-  abstract int getMessageCountForThreadSummary(long threadId);
   public abstract boolean hasMeaningfulMessage(long threadId);
   public abstract Optional<MmsNotificationInfo> getNotification(long messageId);
 
@@ -86,6 +89,7 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
   public abstract Cursor getMessageCursor(long messageId);
   public abstract OutgoingMediaMessage getOutgoingMessage(long messageId) throws MmsException, NoSuchMessageException;
   public abstract MessageRecord getMessageRecord(long messageId) throws NoSuchMessageException;
+  public abstract @Nullable MessageRecord getMessageRecordOrNull(long messageId);
   public abstract Cursor getVerboseMessageCursor(long messageId);
   public abstract boolean hasReceivedAnyCallsSince(long threadId, long timestamp);
   public abstract @Nullable ViewOnceExpirationInfo getNearestExpiringViewOnceMessage();
@@ -130,7 +134,7 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
   public abstract List<MarkedMessageInfo> setEntireThreadRead(long threadId);
   public abstract List<MarkedMessageInfo> setMessagesReadSince(long threadId, long timestamp);
   public abstract List<MarkedMessageInfo> setAllMessagesRead();
-  public abstract Pair<Long, Long> updateBundleMessageBody(long messageId, String body);
+  public abstract InsertResult updateBundleMessageBody(long messageId, String body);
   public abstract @NonNull List<MarkedMessageInfo> getViewedIncomingMessages(long threadId);
   public abstract @Nullable MarkedMessageInfo setIncomingMessageViewed(long messageId);
   public abstract @NonNull List<MarkedMessageInfo> setIncomingMessagesViewed(@NonNull List<Long> messageIds);
@@ -168,7 +172,7 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
 
   public abstract boolean deleteMessage(long messageId);
   abstract void deleteThread(long threadId);
-  abstract void deleteMessagesInThreadBeforeDate(long threadId, long date);
+  abstract int deleteMessagesInThreadBeforeDate(long threadId, long date);
   abstract void deleteThreads(@NonNull Set<Long> threadIds);
   abstract void deleteAllThreads();
   abstract void deleteAbandonedMessages();
@@ -681,11 +685,13 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
 
     private final long           threadId;
     private final SyncMessageId  syncMessageId;
+    private final MessageId      messageId;
     private final ExpirationInfo expirationInfo;
 
-    public MarkedMessageInfo(long threadId, SyncMessageId syncMessageId, ExpirationInfo expirationInfo) {
+    public MarkedMessageInfo(long threadId, @NonNull SyncMessageId syncMessageId, @NonNull MessageId messageId, @Nullable ExpirationInfo expirationInfo) {
       this.threadId       = threadId;
       this.syncMessageId  = syncMessageId;
+      this.messageId      = messageId;
       this.expirationInfo = expirationInfo;
     }
 
@@ -693,11 +699,15 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
       return threadId;
     }
 
-    public SyncMessageId getSyncMessageId() {
+    public @NonNull SyncMessageId getSyncMessageId() {
       return syncMessageId;
     }
 
-    public ExpirationInfo getExpirationInfo() {
+    public @NonNull MessageId getMessageId() {
+      return messageId;
+    }
+
+    public @Nullable ExpirationInfo getExpirationInfo() {
       return expirationInfo;
     }
   }

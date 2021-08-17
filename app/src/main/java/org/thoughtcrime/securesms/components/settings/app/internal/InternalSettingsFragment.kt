@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.signal.core.util.concurrent.SignalExecutors
+import org.thoughtcrime.securesms.BuildConfig
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.components.settings.DSLConfiguration
 import org.thoughtcrime.securesms.components.settings.DSLSettingsAdapter
@@ -15,6 +16,7 @@ import org.thoughtcrime.securesms.components.settings.DSLSettingsFragment
 import org.thoughtcrime.securesms.components.settings.DSLSettingsText
 import org.thoughtcrime.securesms.components.settings.configure
 import org.thoughtcrime.securesms.database.DatabaseFactory
+import org.thoughtcrime.securesms.database.LocalMetricsDatabase
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
 import org.thoughtcrime.securesms.jobs.RefreshAttributesJob
 import org.thoughtcrime.securesms.jobs.RefreshOwnProfileJob
@@ -242,6 +244,52 @@ class InternalSettingsFragment : DSLSettingsFragment(R.string.preferences__inter
           viewModel.setRemoveSenderKeyMinimum(!state.removeSenderKeyMinimium)
         }
       )
+
+      switchPref(
+        title = DSLSettingsText.from(R.string.preferences__internal_delay_resends),
+        summary = DSLSettingsText.from(R.string.preferences__internal_delay_resending_messages_in_response_to_retry_receipts),
+        isChecked = state.delayResends,
+        onClick = {
+          viewModel.setDelayResends(!state.delayResends)
+        }
+      )
+
+      dividerPref()
+
+      sectionHeaderPref(R.string.preferences__internal_local_metrics)
+
+      clickPref(
+        title = DSLSettingsText.from(R.string.preferences__internal_clear_local_metrics),
+        summary = DSLSettingsText.from(R.string.preferences__internal_click_to_clear_all_local_metrics_state),
+        onClick = {
+          clearAllLocalMetricsState()
+        }
+      )
+
+      dividerPref()
+
+      sectionHeaderPref(R.string.preferences__internal_calling)
+
+      radioPref(
+        title = DSLSettingsText.from(R.string.preferences__internal_calling_default),
+        summary = DSLSettingsText.from(BuildConfig.SIGNAL_SFU_URL),
+        isChecked = state.callingServer == BuildConfig.SIGNAL_SFU_URL,
+        onClick = {
+          viewModel.setInternalGroupCallingServer(null)
+        }
+      )
+
+      BuildConfig.SIGNAL_SFU_INTERNAL_NAMES.zip(BuildConfig.SIGNAL_SFU_INTERNAL_URLS)
+        .forEach { (name, server) ->
+          radioPref(
+            title = DSLSettingsText.from(requireContext().getString(R.string.preferences__internal_calling_s_server, name)),
+            summary = DSLSettingsText.from(server),
+            isChecked = state.callingServer == server,
+            onClick = {
+              viewModel.setInternalGroupCallingServer(server)
+            }
+          )
+        }
     }
   }
 
@@ -318,5 +366,10 @@ class InternalSettingsFragment : DSLSettingsFragment(R.string.preferences__inter
   private fun clearAllSenderKeySharedState() {
     DatabaseFactory.getSenderKeySharedDatabase(requireContext()).deleteAll()
     Toast.makeText(context, "Deleted all sender key shared state.", Toast.LENGTH_SHORT).show()
+  }
+
+  private fun clearAllLocalMetricsState() {
+    LocalMetricsDatabase.getInstance(ApplicationDependencies.getApplication()).clear()
+    Toast.makeText(context, "Cleared all local metrics state.", Toast.LENGTH_SHORT).show()
   }
 }
