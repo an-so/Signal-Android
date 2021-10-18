@@ -326,4 +326,13 @@
         <attr name="bsiv_label" format="string" />
         <attr name="bsiv_icon_contentDescription" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="BadgeImageView">
+        <attr name="badge_size" format="enum">
+            <enum name="small" value="0" />
+            <enum name="medium" value="1" />
+            <enum name="large" value="2" />
+            <enum name="xlarge" value="3" />
+        </attr>
+    </declare-styleable>
 </resources>

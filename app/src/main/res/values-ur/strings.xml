@@ -685,6 +685,7 @@
   <string name="CustomNotificationsDialogFragment__enabled">فعال ہونا</string>
   <string name="CustomNotificationsDialogFragment__disabled">غیر فعال ہونا</string>
   <string name="CustomNotificationsDialogFragment__default">پہلے سے طے شدہ</string>
+  <string name="CustomNotificationsDialogFragment__unknown">نامعلوم</string>
   <!--ShareableGroupLinkDialogFragment-->
   <string name="ShareableGroupLinkDialogFragment__shareable_group_link">قابل اشتراک گروپ لنک</string>
   <string name="ShareableGroupLinkDialogFragment__manage_and_share"> انتظام کریں؛&amp;amp بانٹیں</string>
@@ -1631,6 +1632,7 @@
   <string name="QuoteView_audio">آڈیو</string>
   <string name="QuoteView_video">ویڈیو</string>
   <string name="QuoteView_photo">تصویر</string>
+  <string name="QuoteView_gif">گِف</string>
   <string name="QuoteView_view_once_media">صرف ایک بار دیکھنے کے قابل میڈیا</string>
   <string name="QuoteView_sticker">اسٹیکر</string>
   <string name="QuoteView_you">تم</string>
@@ -1787,6 +1789,7 @@
   <!--verify_identity-->
   <string name="verify_identity__share_safety_number">حفاظتی نمبر اشتراک کریں</string>
   <!--verity_scan_fragment-->
+  <string name="verify_scan_fragment__scan_the_qr_code_on_your_contact">اپنی رابطہ ڈیوائس پر QR کوڈ سکین کریں۔</string>
   <!--webrtc_answer_decline_button-->
   <string name="webrtc_answer_decline_button__swipe_up_to_answer">جواب دینے کے لیے اوپر سوائپ کریں</string>
   <string name="webrtc_answer_decline_button__swipe_down_to_reject">مسترد کرنے کے لیے نیچے سوائپ کریں</string>
@@ -2948,6 +2951,8 @@
   <string name="HelpFragment__copyright_signal_messenger">کاپی رائٹ Signal میسنجر</string>
   <string name="HelpFragment__licenced_under_the_gplv3">GPLv3 کے تحت لائسنس یافتہ</string>
   <!--DataAndStorageSettingsFragment-->
+  <string name="DataAndStorageSettingsFragment__high">اونچا</string>
+  <string name="DataAndStorageSettingsFragment__standard">معیار</string>
   <string name="DataAndStorageSettingsFragment__calls">کالز</string>
   <!--ChatColorSelectionFragment-->
   <string name="ChatColorSelectionFragment__auto">آٹو</string>
@@ -3070,7 +3075,7 @@
   <!--ContactFilterView-->
   <string name="ContactFilterView__search_name_or_number">نام یا نمبر تلاش کریں</string>
   <!--VoiceNotePlayerView-->
-  <string name="VoiceNotePlayerView__s_dot_s">%1$s · %2$s</string>
+  <string name="VoiceNotePlayerView__dot_s">· %1$s</string>
   <!--AvatarPickerFragment-->
   <string name="AvatarPickerFragment__avatar_preview">اوتار پیش نظارہ</string>
   <string name="AvatarPickerFragment__camera">کیمرہ</string>
@@ -3097,9 +3102,17 @@
   <!--Media V2-->
   <string name="ImageEditorHud__cancel">منسوخ کریں</string>
   <string name="ImageEditorHud__undo">کالعدم کریں</string>
+  <string name="ImageEditorHud__delete">حذف کریں</string>
   <string name="MediaCountIndicatorButton__send">بھیجیں</string>
   <string name="MediaReviewSelectedItem__tap_to_select">منتخب کرنے کے لیے ٹیپ کریں</string>
   <string name="MediaReviewImagePageFragment__discard">مسترد کیجئے</string>
-  <string name="ImageEditorHud__delete">حذف کریں</string>
+  <string name="SelectFeaturedBadgeFragment__preview">پیش نظارہ</string>
+  <string name="SubscribeFragment__signal_is_powered_by_people_like_you">Signal آپ جیسے لوگوں کے ذریعہ تقویت یافتہ ہے۔</string>
+  <string name="SubscribeFragment__donation_amount">عطیہ کی رقم۔</string>
+  <string name="SubscribeFragment__not_now">ابھی نہیں</string>
+  <string name="SubscribeFragment__confirm">تصدیق</string>
+  <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__done">ہو گیا</string>
+  <string name="Boost__enter_custom_amount">اپنی مرضی کی رقم درج کریں۔</string>
+  <string name="ExpiredBadgeBottomSheetDialogFragment__not_now">ابھی نہیں</string>
   <!--EOF-->
 </resources>

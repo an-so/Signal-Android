@@ -34,16 +34,16 @@ import org.signal.core.util.logging.Log;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.animation.ResizeAnimation;
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
-import org.thoughtcrime.securesms.imageeditor.Bounds;
-import org.thoughtcrime.securesms.imageeditor.ColorableRenderer;
-import org.thoughtcrime.securesms.imageeditor.ImageEditorView;
-import org.thoughtcrime.securesms.imageeditor.Renderer;
-import org.thoughtcrime.securesms.imageeditor.SelectableRenderer;
-import org.thoughtcrime.securesms.imageeditor.model.EditorElement;
-import org.thoughtcrime.securesms.imageeditor.model.EditorModel;
-import org.thoughtcrime.securesms.imageeditor.renderers.BezierDrawingRenderer;
-import org.thoughtcrime.securesms.imageeditor.renderers.FaceBlurRenderer;
-import org.thoughtcrime.securesms.imageeditor.renderers.MultiLineTextRenderer;
+import org.signal.imageeditor.core.Bounds;
+import org.signal.imageeditor.core.ColorableRenderer;
+import org.signal.imageeditor.core.ImageEditorView;
+import org.signal.imageeditor.core.Renderer;
+import org.signal.imageeditor.core.SelectableRenderer;
+import org.signal.imageeditor.core.model.EditorElement;
+import org.signal.imageeditor.core.model.EditorModel;
+import org.signal.imageeditor.core.renderers.BezierDrawingRenderer;
+import org.signal.imageeditor.core.renderers.FaceBlurRenderer;
+import org.signal.imageeditor.core.renderers.MultiLineTextRenderer;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.mediasend.MediaSendPageFragment;
 import org.thoughtcrime.securesms.mediasend.v2.MediaAnimations;
@@ -84,7 +84,8 @@ public final class ImageEditorFragment extends Fragment implements ImageEditorHu
 
   private static final int SELECT_STICKER_REQUEST_CODE = 124;
 
-  private static final int HUD_PROTECTION = ViewUtil.dpToPx(72);
+  private static final int DRAW_HUD_PROTECTION = ViewUtil.dpToPx(72);
+  private static final int CROP_HUD_PROTECTION = ViewUtil.dpToPx(144);
 
   private EditorModel restoredModel;
 
@@ -95,6 +96,9 @@ public final class ImageEditorFragment extends Fragment implements ImageEditorHu
   private           int           imageMaxWidth;
 
   private final ThrottledDebouncer deleteFadeDebouncer = new ThrottledDebouncer(500);
+  private       float              initialDialImageDegrees;
+  private       float              initialDialScale;
+  private       float              minDialScaleDown;
 
   public static class Data {
     private final Bundle bundle;
@@ -132,7 +136,6 @@ public final class ImageEditorFragment extends Fragment implements ImageEditorHu
   private ImageEditorView  imageEditorView;
   private boolean          hasMadeAnEditThisSession;
   private boolean          wasInTrashHitZone;
-
 
   public static ImageEditorFragment newInstanceForAvatarCapture(@NonNull Uri imageUri) {
     ImageEditorFragment fragment = newInstance(imageUri);
@@ -422,6 +425,8 @@ public final class ImageEditorFragment extends Fragment implements ImageEditorHu
                    .setVisible(mode == ImageEditorHudV2.Mode.DELETE)
                    .persist();
 
+    updateHudDialRotation();
+
     switch (mode) {
       case CROP: {
         imageEditorView.getModel().startCrop();
@@ -473,13 +478,22 @@ public final class ImageEditorFragment extends Fragment implements ImageEditorHu
   {
     boolean shouldScaleViewPortForCurrentMode  = shouldScaleViewPort(mode);
     boolean shouldScaleViewPortForPreviousMode = shouldScaleViewPort(previousMode);
+    int     hudProtection                      = getHudProtection(mode);
 
     if (shouldScaleViewPortForCurrentMode != shouldScaleViewPortForPreviousMode || force) {
       if (shouldScaleViewPortForCurrentMode) {
-        scaleViewPortForDrawing(orientation);
+        scaleViewPortForDrawing(orientation, hudProtection);
       } else {
         restoreViewPortScaling(orientation);
       }
+    }
+  }
+
+  private int getHudProtection(ImageEditorHudV2.Mode mode) {
+    if (mode == ImageEditorHudV2.Mode.CROP) {
+      return CROP_HUD_PROTECTION;
+    } else {
+      return DRAW_HUD_PROTECTION;
     }
   }
 
@@ -561,6 +575,7 @@ public final class ImageEditorFragment extends Fragment implements ImageEditorHu
   @Override
   public void onClearAll() {
     imageEditorView.getModel().clearUndoStack();
+    updateHudDialRotation();
   }
 
   @Override
@@ -586,6 +601,7 @@ public final class ImageEditorFragment extends Fragment implements ImageEditorHu
   public void onUndo() {
     imageEditorView.getModel().undo();
     imageEditorHud.setBlurFacesToggleEnabled(imageEditorView.getModel().hasFaceRenderer());
+    updateHudDialRotation();
   }
 
   @Override
@@ -641,9 +657,35 @@ public final class ImageEditorFragment extends Fragment implements ImageEditorHu
     controller.onDoneEditing();
   }
 
+  @Override
+  public void onDialRotationGestureStarted() {
+    float localScaleX = imageEditorView.getModel().getMainImage().getLocalScaleX();
+    minDialScaleDown = initialDialScale / localScaleX;
+    imageEditorView.getModel().pushUndoPoint();
+    imageEditorView.getModel().updateUndoRedoAvailabilityState();
+    initialDialImageDegrees = (float) Math.toDegrees(imageEditorView.getModel().getMainImage().getLocalRotationAngle());
+  }
+
+  @Override
+  public void onDialRotationGestureFinished() {
+    imageEditorView.getModel().getMainImage().commitEditorMatrix();
+    imageEditorView.getModel().postEdit(true);
+    imageEditorView.invalidate();
+  }
+
+  @Override
+  public void onDialRotationChanged(float degrees) {
+    imageEditorView.setMainImageEditorMatrixRotation(degrees - initialDialImageDegrees, minDialScaleDown);
+  }
+
+  private void updateHudDialRotation() {
+    imageEditorHud.setDialRotation(getRotationDegreesRounded(imageEditorView.getModel().getMainImage()));
+    initialDialScale = imageEditorView.getModel().getMainImage().getLocalScaleX();
+  }
+
   private ResizeAnimation resizeAnimation;
 
-  private void scaleViewPortForDrawing(int orientation) {
+  private void scaleViewPortForDrawing(int orientation, int protection) {
     if (resizeAnimation != null) {
       resizeAnimation.cancel();
     }
@@ -651,7 +693,7 @@ public final class ImageEditorFragment extends Fragment implements ImageEditorHu
     float aspectRatio  = getAspectRatioForOrientation(orientation);
     int   targetWidth  = getWidthForOrientation(orientation) - ViewUtil.dpToPx(32);
     int   targetHeight = (int) ((1 / aspectRatio) * targetWidth);
-    int   maxHeight    = getHeightForOrientation(orientation) - HUD_PROTECTION;
+    int   maxHeight    = getHeightForOrientation(orientation) - protection;
 
     if (targetHeight > maxHeight) {
       targetHeight = maxHeight;
@@ -710,7 +752,7 @@ public final class ImageEditorFragment extends Fragment implements ImageEditorHu
   }
 
   private static boolean shouldScaleViewPort(@NonNull ImageEditorHudV2.Mode mode) {
-    return mode != ImageEditorHudV2.Mode.NONE && mode != ImageEditorHudV2.Mode.CROP;
+    return mode != ImageEditorHudV2.Mode.NONE;
   }
 
   private void performSaveToDisk() {
@@ -738,6 +780,7 @@ public final class ImageEditorFragment extends Fragment implements ImageEditorHu
   private void onDrawingChanged(boolean stillTouching, boolean isUserEdit) {
     if (isUserEdit) {
       hasMadeAnEditThisSession = true;
+
     }
   }
 
@@ -832,10 +875,18 @@ public final class ImageEditorFragment extends Fragment implements ImageEditorHu
     }
   };
 
+  public float getRotationDegreesRounded(@Nullable EditorElement editorElement) {
+    if (editorElement == null) {
+      return 0f;
+    }
+    return Math.round(Math.toDegrees(editorElement.getLocalRotationAngle()));
+  }
+
   private final ImageEditorView.DragListener dragListener = new ImageEditorView.DragListener() {
     @Override
     public void onDragStarted(@Nullable EditorElement editorElement) {
       if (imageEditorHud.getMode() == ImageEditorHudV2.Mode.CROP) {
+        updateHudDialRotation();
         return;
       }
 
@@ -855,6 +906,7 @@ public final class ImageEditorFragment extends Fragment implements ImageEditorHu
     @Override
     public void onDragMoved(@Nullable EditorElement editorElement, boolean isInTrashHitZone) {
       if (imageEditorHud.getMode() == ImageEditorHudV2.Mode.CROP || editorElement == null) {
+        updateHudDialRotation();
         return;
       }
 
@@ -882,6 +934,7 @@ public final class ImageEditorFragment extends Fragment implements ImageEditorHu
       wasInTrashHitZone = false;
       imageEditorHud.animate().alpha(1f);
       if (imageEditorHud.getMode() == ImageEditorHudV2.Mode.CROP) {
+        updateHudDialRotation();
         return;
       }
 
@@ -961,6 +1014,7 @@ public final class ImageEditorFragment extends Fragment implements ImageEditorHu
     if (editorElement != null && editorElement.getRenderer() instanceof SelectableRenderer) {
       ((SelectableRenderer) editorElement.getRenderer()).onSelected(selected);
     }
+    imageEditorView.getModel().setSelected(selected ? editorElement : null);
   }
 
   private final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(false) {

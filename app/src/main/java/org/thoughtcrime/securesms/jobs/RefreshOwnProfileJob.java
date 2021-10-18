@@ -1,5 +1,6 @@
 package org.thoughtcrime.securesms.jobs;
 
+import android.net.Uri;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -8,6 +9,8 @@ import androidx.annotation.Nullable;
 import org.signal.core.util.logging.Log;
 import org.signal.zkgroup.profiles.ProfileKey;
 import org.signal.zkgroup.profiles.ProfileKeyCredential;
+import org.thoughtcrime.securesms.BuildConfig;
+import org.thoughtcrime.securesms.badges.models.Badge;
 import org.thoughtcrime.securesms.crypto.ProfileKeyUtil;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
 import org.thoughtcrime.securesms.database.RecipientDatabase;
@@ -15,11 +18,14 @@ import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
 import org.thoughtcrime.securesms.jobmanager.Data;
 import org.thoughtcrime.securesms.jobmanager.Job;
 import org.thoughtcrime.securesms.jobmanager.impl.NetworkConstraint;
+import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.profiles.ProfileName;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.util.ProfileUtil;
+import org.thoughtcrime.securesms.util.ScreenDensity;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.Util;
+import org.whispersystems.libsignal.util.Pair;
 import org.whispersystems.libsignal.util.guava.Optional;
 import org.whispersystems.signalservice.api.crypto.InvalidCiphertextException;
 import org.whispersystems.signalservice.api.profiles.ProfileAndCredential;
@@ -27,6 +33,10 @@ import org.whispersystems.signalservice.api.profiles.SignalServiceProfile;
 import org.whispersystems.signalservice.api.push.exceptions.PushNetworkException;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -71,14 +81,25 @@ public class RefreshOwnProfileJob extends BaseJob {
       return;
     }
 
+    if (SignalStore.kbsValues().hasPin() && !SignalStore.kbsValues().hasOptedOut() && SignalStore.storageService().getLastSyncTime() == 0) {
+      Log.i(TAG, "Registered with PIN but haven't completed storage sync yet.");
+      return;
+    }
+
+    if (!SignalStore.registrationValues().hasUploadedProfile()) {
+      Log.i(TAG, "Registered but haven't uploaded profile yet.");
+      return;
+    }
+
     Recipient            self                 = Recipient.self();
-    ProfileAndCredential profileAndCredential = ProfileUtil.retrieveProfileSync(context, self, getRequestType(self));
+    ProfileAndCredential profileAndCredential = ProfileUtil.retrieveProfileSync(context, self, getRequestType(self), false);
     SignalServiceProfile profile              = profileAndCredential.getProfile();
 
     setProfileName(profile.getName());
     setProfileAbout(profile.getAbout(), profile.getAboutEmoji());
     setProfileAvatar(profile.getAvatar());
     setProfileCapabilities(profile.getCapabilities());
+    setProfileBadges(profile.getBadges());
     Optional<ProfileKeyCredential> profileKeyCredential = profileAndCredential.getProfileKeyCredential();
     if (profileKeyCredential.isPresent()) {
       setProfileKeyCredential(self, ProfileKeyUtil.getSelfProfileKey(), profileKeyCredential.get());
@@ -113,6 +134,7 @@ public class RefreshOwnProfileJob extends BaseJob {
       String      plaintextName = ProfileUtil.decryptString(profileKey, encryptedName);
       ProfileName profileName   = ProfileName.fromSerialized(plaintextName);
 
+      Log.d(TAG, "Saving " + (!Util.isEmpty(plaintextName) ? "non-" : "") + "empty name.");
       DatabaseFactory.getRecipientDatabase(context).setProfileName(Recipient.self().getId(), profileName);
     } catch (InvalidCiphertextException | IOException e) {
       Log.w(TAG, e);
@@ -135,6 +157,7 @@ public class RefreshOwnProfileJob extends BaseJob {
   }
 
   private static void setProfileAvatar(@Nullable String avatar) {
+    Log.d(TAG, "Saving " + (!Util.isEmpty(avatar) ? "non-" : "") + "empty avatar.");
     ApplicationDependencies.getJobManager().add(new RetrieveProfileAvatarJob(Recipient.self(), avatar));
   }
 
@@ -144,6 +167,34 @@ public class RefreshOwnProfileJob extends BaseJob {
     }
 
     DatabaseFactory.getRecipientDatabase(context).setCapabilities(Recipient.self().getId(), capabilities);
+  }
+
+  private void setProfileBadges(@Nullable List<SignalServiceProfile.Badge> badges) {
+    if (badges == null) {
+      return;
+    }
+
+    DatabaseFactory.getRecipientDatabase(context)
+                   .setBadges(Recipient.self().getId(),
+                              badges.stream().map(RefreshOwnProfileJob::adaptFromServiceBadge).collect(Collectors.toList()));
+  }
+
+  private static Badge adaptFromServiceBadge(@NonNull SignalServiceProfile.Badge serviceBadge) {
+    Pair<Uri, String> uriAndDensity = RetrieveProfileJob.getBestBadgeImageUriForDevice(serviceBadge);
+    return new Badge(
+        serviceBadge.getId(),
+        Badge.Category.Companion.fromCode(serviceBadge.getCategory()),
+        serviceBadge.getName(),
+        serviceBadge.getDescription(),
+        uriAndDensity.first(),
+        uriAndDensity.second(),
+        getTimestamp(serviceBadge.getExpiration()),
+        serviceBadge.isVisible()
+    );
+  }
+
+  private static long getTimestamp(@NonNull BigDecimal bigDecimal) {
+    return new Timestamp(bigDecimal.longValue() * 1000).getTime();
   }
 
   public static final class Factory implements Job.Factory<RefreshOwnProfileJob> {

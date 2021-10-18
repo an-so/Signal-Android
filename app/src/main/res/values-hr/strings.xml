@@ -720,6 +720,7 @@
   <string name="CustomNotificationsDialogFragment__enabled">Omogućeno</string>
   <string name="CustomNotificationsDialogFragment__disabled">Onemogućeno</string>
   <string name="CustomNotificationsDialogFragment__default">Zadano</string>
+  <string name="CustomNotificationsDialogFragment__unknown">Nepoznato</string>
   <!--ShareableGroupLinkDialogFragment-->
   <string name="ShareableGroupLinkDialogFragment__shareable_group_link">Poveznica grupe koja se može dijeliti</string>
   <string name="ShareableGroupLinkDialogFragment__manage_and_share">Upravljanje i dijeljenje</string>
@@ -1707,6 +1708,7 @@ broj telefona</string>
   <string name="QuoteView_audio">Zvuk</string>
   <string name="QuoteView_video">Video</string>
   <string name="QuoteView_photo">Fotografija</string>
+  <string name="QuoteView_gif">GIF</string>
   <string name="QuoteView_view_once_media">Jednom vidljiv medijski zapis</string>
   <string name="QuoteView_sticker">Naljepnica</string>
   <string name="QuoteView_you">Vi</string>
@@ -1870,6 +1872,7 @@ broj telefona</string>
   <!--verify_identity-->
   <string name="verify_identity__share_safety_number">Podijeli sigurnosni broj</string>
   <!--verity_scan_fragment-->
+  <string name="verify_scan_fragment__scan_the_qr_code_on_your_contact">Skenirajte QR kôd na uređaju vašeg kontakta.</string>
   <!--webrtc_answer_decline_button-->
   <string name="webrtc_answer_decline_button__swipe_up_to_answer">Povucite za odgovor</string>
   <string name="webrtc_answer_decline_button__swipe_down_to_reject">Povucite prema dolje za odbijanje</string>
@@ -3039,6 +3042,9 @@ broj telefona</string>
   <string name="HelpFragment__copyright_signal_messenger">Copyright Signal Messenger</string>
   <string name="HelpFragment__licenced_under_the_gplv3">GPLv3 licenca</string>
   <!--DataAndStorageSettingsFragment-->
+  <string name="DataAndStorageSettingsFragment__sending_high_quality_media_will_use_more_data">Slanje visokokvalitetnih medija zahtjeva veću potrošnju mobilnih podataka.</string>
+  <string name="DataAndStorageSettingsFragment__high">Visoko</string>
+  <string name="DataAndStorageSettingsFragment__standard">Standardno</string>
   <string name="DataAndStorageSettingsFragment__calls">Pozivi</string>
   <!--ChatColorSelectionFragment-->
   <string name="ChatColorSelectionFragment__auto">Auto</string>
@@ -3163,7 +3169,7 @@ broj telefona</string>
   <!--ContactFilterView-->
   <string name="ContactFilterView__search_name_or_number">Pretraži ime ili broj</string>
   <!--VoiceNotePlayerView-->
-  <string name="VoiceNotePlayerView__s_dot_s">%1$s · %2$s</string>
+  <string name="VoiceNotePlayerView__dot_s">· %1$s</string>
   <string name="VoiceNotePlayerView__stop_voice_message">Zaustavi glasovnu poruku</string>
   <string name="VoiceNotePlayerView__change_voice_message_speed">Promijeni brzinu glasovne poruke</string>
   <string name="VoiceNotePlayerView__pause_voice_message">Pauziraj glasovnu poruku</string>
@@ -3203,9 +3209,17 @@ broj telefona</string>
   <string name="ImageEditorHud__cancel">Poništi</string>
   <string name="ImageEditorHud__blur">Zamuti</string>
   <string name="ImageEditorHud__undo">Poništi</string>
+  <string name="ImageEditorHud__delete">Izbriši</string>
   <string name="MediaCountIndicatorButton__send">Pošalji</string>
   <string name="MediaReviewSelectedItem__tap_to_select">Pritisni za odabir slike profila</string>
   <string name="MediaReviewImagePageFragment__discard">Poništi</string>
-  <string name="ImageEditorHud__delete">Izbriši</string>
+  <string name="SelectFeaturedBadgeFragment__preview">Pregled</string>
+  <string name="SubscribeFragment__signal_is_powered_by_people_like_you">Signal napajaju ljudi poput vas.</string>
+  <string name="SubscribeFragment__donation_amount">Iznos donacije</string>
+  <string name="SubscribeFragment__not_now">Ne sada</string>
+  <string name="SubscribeFragment__confirm">Potvrdi</string>
+  <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__done">Gotovo</string>
+  <string name="Boost__enter_custom_amount">Unesi prilagođeni iznos</string>
+  <string name="ExpiredBadgeBottomSheetDialogFragment__not_now">Ne sada</string>
   <!--EOF-->
 </resources>

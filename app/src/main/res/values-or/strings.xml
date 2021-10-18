@@ -672,6 +672,7 @@
   <string name="CustomNotificationsDialogFragment__enabled">ସକ୍ଷମ</string>
   <string name="CustomNotificationsDialogFragment__disabled">ଅକ୍ଷମ</string>
   <string name="CustomNotificationsDialogFragment__default">ଡିଫଲ୍ଟ</string>
+  <string name="CustomNotificationsDialogFragment__unknown">ଅଜଣା</string>
   <!--ShareableGroupLinkDialogFragment-->
   <string name="ShareableGroupLinkDialogFragment__shareable_group_link">ଅଂଶୀଦାର କରିବା ଯୋଗ୍ୟ ଗୋଷ୍ଠୀ ଲିଙ୍କ୍</string>
   <string name="ShareableGroupLinkDialogFragment__manage_and_share">ପରିଚାଳନା ଓ ଅଂଶୀଦାର</string>
@@ -1596,6 +1597,7 @@
   <string name="QuoteView_audio">ଅଡ଼ିଓ</string>
   <string name="QuoteView_video">ଭିଡ଼ିଓ</string>
   <string name="QuoteView_photo">ଛବି</string>
+  <string name="QuoteView_gif">ଜିଆଇଏଫ୍</string>
   <string name="QuoteView_view_once_media">ଥରେ-ଦେଖିବା ମିଡ଼ିଆ</string>
   <string name="QuoteView_sticker">ଷ୍ଟିକର୍</string>
   <string name="QuoteView_you">ଆପଣ</string>
@@ -2659,6 +2661,7 @@
   <string name="HelpSettingsFragment__terms_amp_privacy_policy">ସର୍ତ୍ତାବଳୀ ଓ ଗୋପନୀୟତା ନୀତି</string>
   <string name="HelpFragment__licenced_under_the_gplv3">GPLv3 ଅଧୀନରେ ଲାଇସେନ୍ସପ୍ରାପ୍ତ</string>
   <!--DataAndStorageSettingsFragment-->
+  <string name="DataAndStorageSettingsFragment__high">ଉଚ୍ଚ</string>
   <string name="DataAndStorageSettingsFragment__calls">କଲ୍</string>
   <!--ChatColorSelectionFragment-->
   <string name="ChatColorSelectionFragment__auto">ସ୍ଵତଃ</string>
@@ -2728,7 +2731,6 @@
   <!--ContactFilterView-->
   <string name="ContactFilterView__search_name_or_number">ନାମ କିମ୍ୱା ନମ୍ଵର୍ ସନ୍ଧାନ କରନ୍ତୁ</string>
   <!--VoiceNotePlayerView-->
-  <string name="VoiceNotePlayerView__s_dot_s">%1$s . %2$s</string>
   <!--AvatarPickerFragment-->
   <string name="AvatarPickerFragment__avatar_preview">ଅବତାର ପୂର୍ବାବଲୋକନ</string>
   <string name="AvatarPickerFragment__camera">କ୍ୟାମେରା</string>
@@ -2753,8 +2755,12 @@
   <!--Media V2-->
   <string name="ImageEditorHud__cancel">ବାତିଲ କରନ୍ତୁ</string>
   <string name="ImageEditorHud__write_text">ପାଠ୍ୟ ଲେଖନ୍ତୁ</string>
+  <string name="ImageEditorHud__delete">ବିଲୋପ କରନ୍ତୁ</string>
   <string name="MediaCountIndicatorButton__send">ପଠାନ୍ତୁ</string>
   <string name="MediaReviewSelectedItem__tap_to_select">ମନୋନୟନ କରିବାକୁ ଟ୍ୟାପ୍ କରନ୍ତୁ</string>
-  <string name="ImageEditorHud__delete">ବିଲୋପ କରନ୍ତୁ</string>
+  <string name="SelectFeaturedBadgeFragment__preview">ପୂର୍ବାବଲୋକନ</string>
+  <string name="SubscribeFragment__not_now">ଏବେ ନୁହେଁ</string>
+  <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__done">ହେଇଗଲା</string>
+  <string name="ExpiredBadgeBottomSheetDialogFragment__not_now">ଏବେ ନୁହେଁ</string>
   <!--EOF-->
 </resources>

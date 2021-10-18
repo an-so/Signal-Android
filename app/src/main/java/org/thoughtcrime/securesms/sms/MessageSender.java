@@ -122,7 +122,7 @@ public class MessageSender {
 
     sendTextMessage(context, recipient, forceSms, keyExchange, messageId);
     onMessageSent();
-    ThreadUpdateJob.enqueue(threadId);
+    DatabaseFactory.getThreadDatabase(context).update(threadId, true);
 
     return allocatedThreadId;
   }
@@ -151,6 +151,7 @@ public class MessageSender {
 
       sendMediaMessage(context, recipient, forceSms, messageId, Collections.emptyList());
       onMessageSent();
+      threadDatabase.update(threadId, true);
 
       return allocatedThreadId;
     } catch (MmsException e) {
@@ -194,6 +195,7 @@ public class MessageSender {
 
       sendMediaMessage(context, recipient, false, messageId, jobIds);
       onMessageSent();
+      threadDatabase.update(threadId, true);
 
       return allocatedThreadId;
     } catch (MmsException e) {

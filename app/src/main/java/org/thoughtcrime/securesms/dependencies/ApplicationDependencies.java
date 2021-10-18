@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 
+import org.signal.core.util.concurrent.DeadlockDetector;
 import org.thoughtcrime.securesms.KbsEnclave;
 import org.thoughtcrime.securesms.components.TypingStatusRepository;
 import org.thoughtcrime.securesms.components.TypingStatusSender;
@@ -39,13 +40,16 @@ import org.thoughtcrime.securesms.util.EarlyMessageCache;
 import org.thoughtcrime.securesms.util.FrameRateTracker;
 import org.thoughtcrime.securesms.util.Hex;
 import org.thoughtcrime.securesms.util.IasKeyStore;
+import org.thoughtcrime.securesms.video.exo.SimpleExoPlayerPool;
 import org.thoughtcrime.securesms.video.exo.GiphyMp4Cache;
+import org.thoughtcrime.securesms.webrtc.audio.AudioManagerCompat;
 import org.whispersystems.signalservice.api.KeyBackupService;
 import org.whispersystems.signalservice.api.SignalServiceAccountManager;
 import org.whispersystems.signalservice.api.SignalServiceMessageReceiver;
 import org.whispersystems.signalservice.api.SignalServiceMessageSender;
 import org.whispersystems.signalservice.api.SignalWebSocket;
 import org.whispersystems.signalservice.api.groupsv2.GroupsV2Operations;
+import org.whispersystems.signalservice.api.services.DonationsService;
 
 import okhttp3.OkHttpClient;
 
@@ -100,6 +104,10 @@ public class ApplicationDependencies {
   private static volatile TextSecurePreKeyStore        preKeyStore;
   private static volatile SignalSenderKeyStore         senderKeyStore;
   private static volatile GiphyMp4Cache                giphyMp4Cache;
+  private static volatile SimpleExoPlayerPool          exoPlayerPool;
+  private static volatile AudioManagerCompat           audioManagerCompat;
+  private static volatile DonationsService             donationsService;
+  private static volatile DeadlockDetector             deadlockDetector;
 
   @MainThread
   public static void init(@NonNull Application application, @NonNull Provider provider) {
@@ -564,6 +572,50 @@ public class ApplicationDependencies {
     return giphyMp4Cache;
   }
 
+  public static @NonNull SimpleExoPlayerPool getExoPlayerPool() {
+    if (exoPlayerPool == null) {
+      synchronized (LOCK) {
+        if (exoPlayerPool == null) {
+          exoPlayerPool = provider.provideExoPlayerPool();
+        }
+      }
+    }
+    return exoPlayerPool;
+  }
+
+  public static @NonNull AudioManagerCompat getAndroidCallAudioManager() {
+    if (audioManagerCompat == null) {
+      synchronized (LOCK) {
+        if (audioManagerCompat == null) {
+          audioManagerCompat = provider.provideAndroidCallAudioManager();
+        }
+      }
+    }
+    return audioManagerCompat;
+  }
+
+  public static @NonNull DonationsService getDonationsService() {
+    if (donationsService == null) {
+      synchronized (LOCK) {
+        if (donationsService == null) {
+          donationsService = provider.provideDonationsService();
+        }
+      }
+    }
+    return donationsService;
+  }
+
+  public static @NonNull DeadlockDetector getDeadlockDetector() {
+    if (deadlockDetector == null) {
+      synchronized (LOCK) {
+        if (deadlockDetector == null) {
+          deadlockDetector = provider.provideDeadlockDetector();
+        }
+      }
+    }
+    return deadlockDetector;
+  }
+
   public interface Provider {
     @NonNull GroupsV2Operations provideGroupsV2Operations();
     @NonNull SignalServiceAccountManager provideSignalServiceAccountManager();
@@ -597,5 +649,9 @@ public class ApplicationDependencies {
     @NonNull TextSecurePreKeyStore providePreKeyStore();
     @NonNull SignalSenderKeyStore provideSenderKeyStore();
     @NonNull GiphyMp4Cache provideGiphyMp4Cache();
+    @NonNull SimpleExoPlayerPool provideExoPlayerPool();
+    @NonNull AudioManagerCompat provideAndroidCallAudioManager();
+    @NonNull DonationsService provideDonationsService();
+    @NonNull DeadlockDetector provideDeadlockDetector();
   }
 }

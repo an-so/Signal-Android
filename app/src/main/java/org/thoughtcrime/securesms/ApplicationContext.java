@@ -28,6 +28,7 @@ import androidx.multidex.MultiDexApplication;
 import com.google.android.gms.security.ProviderInstaller;
 
 import org.conscrypt.Conscrypt;
+import org.greenrobot.eventbus.EventBus;
 import org.signal.aesgcmprovider.AesGcmProvider;
 import org.signal.core.util.concurrent.SignalExecutors;
 import org.signal.core.util.logging.AndroidLogger;
@@ -124,7 +125,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
     super.onCreate();
 
     AppStartup.getInstance().addBlocking("security-provider", this::initializeSecurityProvider)
-                            .addBlocking("sqlcipher-init", () -> SqlCipherLibraryLoader.load(this))
+                            .addBlocking("sqlcipher-init", () -> SqlCipherLibraryLoader.load())
                             .addBlocking("logging", () -> {
                               initializeLogging();
                               Log.i(TAG, "onCreate()");
@@ -134,6 +135,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
                               RxJavaPlugins.setInitIoSchedulerHandler(schedulerSupplier -> Schedulers.from(SignalExecutors.BOUNDED_IO, true, false));
                               RxJavaPlugins.setInitComputationSchedulerHandler(schedulerSupplier -> Schedulers.from(SignalExecutors.BOUNDED, true, false));
                             })
+                            .addBlocking("event-bus", () -> EventBus.builder().logNoSubscriberMessages(false).installDefaultEventBus())
                             .addBlocking("app-dependencies", this::initializeAppDependencies)
                             .addBlocking("notification-channels", () -> NotificationChannels.create(this))
                             .addBlocking("first-launch", this::initializeFirstEverAppLaunch)
@@ -189,7 +191,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
     long startTime = System.currentTimeMillis();
     Log.i(TAG, "App is now visible.");
 
-    ApplicationDependencies.getFrameRateTracker().begin();
+    ApplicationDependencies.getFrameRateTracker().start();
     ApplicationDependencies.getMegaphoneRepository().onAppForegrounded();
 
     SignalExecutors.BOUNDED.execute(() -> {
@@ -201,6 +203,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
       KeyCachingService.onAppForegrounded(this);
       ApplicationDependencies.getShakeToReport().enable();
       checkBuildExpiration();
+      ApplicationDependencies.getDeadlockDetector().start();
     });
 
     Log.d(TAG, "onStart() took " + (System.currentTimeMillis() - startTime) + " ms");
@@ -211,8 +214,9 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
     Log.i(TAG, "App is no longer visible.");
     KeyCachingService.onAppBackgrounded(this);
     ApplicationDependencies.getMessageNotifier().clearVisibleThread();
-    ApplicationDependencies.getFrameRateTracker().end();
+    ApplicationDependencies.getFrameRateTracker().stop();
     ApplicationDependencies.getShakeToReport().disable();
+    ApplicationDependencies.getDeadlockDetector().stop();
   }
 
   public PersistentLogger getPersistentLogger() {
@@ -256,7 +260,10 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
 
     SignalProtocolLoggerProvider.setProvider(new CustomSignalProtocolLogger());
 
-    SignalExecutors.UNBOUNDED.execute(() -> LogDatabase.getInstance(this).trimToSize());
+    SignalExecutors.UNBOUNDED.execute(() -> {
+      Log.blockUntilAllWritesFinished();
+      LogDatabase.getInstance(this).trimToSize();
+    });
   }
 
   private void initializeCrashHandling() {

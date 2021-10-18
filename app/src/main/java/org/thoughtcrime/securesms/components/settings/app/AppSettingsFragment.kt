@@ -2,9 +2,11 @@ package org.thoughtcrime.securesms.components.settings.app
 
 import android.view.View
 import android.widget.TextView
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import org.thoughtcrime.securesms.R
+import org.thoughtcrime.securesms.badges.BadgeImageView
 import org.thoughtcrime.securesms.components.AvatarImageView
 import org.thoughtcrime.securesms.components.settings.DSLConfiguration
 import org.thoughtcrime.securesms.components.settings.DSLSettingsAdapter
@@ -27,7 +29,7 @@ class AppSettingsFragment : DSLSettingsFragment(R.string.text_secure_normal__men
     adapter.registerFactory(BioPreference::class.java, MappingAdapter.LayoutFactory(::BioPreferenceViewHolder, R.layout.bio_preference_item))
     adapter.registerFactory(PaymentsPreference::class.java, MappingAdapter.LayoutFactory(::PaymentsPreferenceViewHolder, R.layout.dsl_payments_preference))
 
-    val viewModel = ViewModelProviders.of(this)[AppSettingsViewModel::class.java]
+    val viewModel = ViewModelProvider(this)[AppSettingsViewModel::class.java]
 
     viewModel.state.observe(viewLifecycleOwner) { state ->
       adapter.submitList(getConfiguration(state).toMappingModelList())
@@ -129,11 +131,33 @@ class AppSettingsFragment : DSLSettingsFragment(R.string.text_secure_normal__men
         }
       )
 
-      externalLinkPref(
-        title = DSLSettingsText.from(R.string.preferences__donate_to_signal),
-        icon = DSLSettingsIcon.from(R.drawable.ic_heart_24),
-        linkId = R.string.donate_url
-      )
+      if (FeatureFlags.donorBadges()) {
+        clickPref(
+          title = DSLSettingsText.from(R.string.preferences__subscription),
+          icon = DSLSettingsIcon.from(R.drawable.ic_heart_24),
+          onClick = {
+            findNavController()
+              .navigate(
+                AppSettingsFragmentDirections.actionAppSettingsFragmentToSubscriptions()
+                  .setSkipToSubscribe(true /* TODO [alex] -- Check state to see if user has active subscription or not. */)
+              )
+          }
+        )
+        // TODO [alex] -- clap
+        clickPref(
+          title = DSLSettingsText.from(R.string.preferences__signal_boost),
+          icon = DSLSettingsIcon.from(R.drawable.ic_heart_24),
+          onClick = {
+            findNavController().navigate(R.id.action_appSettingsFragment_to_boostsFragment)
+          }
+        )
+      } else {
+        externalLinkPref(
+          title = DSLSettingsText.from(R.string.preferences__donate_to_signal),
+          icon = DSLSettingsIcon.from(R.drawable.ic_heart_24),
+          linkId = R.string.donate_url
+        )
+      }
 
       if (FeatureFlags.internalUser()) {
         dividerPref()
@@ -162,6 +186,7 @@ class AppSettingsFragment : DSLSettingsFragment(R.string.text_secure_normal__men
 
     private val avatarView: AvatarImageView = itemView.findViewById(R.id.icon)
     private val aboutView: TextView = itemView.findViewById(R.id.about)
+    private val badgeView: BadgeImageView = itemView.findViewById(R.id.badge)
 
     override fun bind(model: BioPreference) {
       super.bind(model)
@@ -171,6 +196,7 @@ class AppSettingsFragment : DSLSettingsFragment(R.string.text_secure_normal__men
       titleView.text = model.recipient.profileName.toString()
       summaryView.text = PhoneNumberFormatter.prettyPrint(model.recipient.requireE164())
       avatarView.setRecipient(Recipient.self())
+      badgeView.setBadgeFromRecipient(Recipient.self())
 
       titleView.visibility = View.VISIBLE
       summaryView.visibility = View.VISIBLE

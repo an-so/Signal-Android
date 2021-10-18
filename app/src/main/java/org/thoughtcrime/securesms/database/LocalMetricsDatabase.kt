@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit
  */
 class LocalMetricsDatabase private constructor(
   application: Application,
-  private val databaseSecret: DatabaseSecret
+  databaseSecret: DatabaseSecret
 ) : SQLiteOpenHelper(
     application,
     DATABASE_NAME,
@@ -33,7 +33,7 @@ class LocalMetricsDatabase private constructor(
     null,
     DATABASE_VERSION,
     0,
-    SqlCipherErrorHandler(DATABASE_NAME),
+    SqlCipherDeletingErrorHandler(DATABASE_NAME),
     SqlCipherDatabaseHook()
   ),
   SignalDatabase {
@@ -80,7 +80,7 @@ class LocalMetricsDatabase private constructor(
       if (instance == null) {
         synchronized(LocalMetricsDatabase::class.java) {
           if (instance == null) {
-            SqlCipherLibraryLoader.load(context)
+            SqlCipherLibraryLoader.load()
             instance = LocalMetricsDatabase(context, DatabaseSecretProvider.getOrCreateDatabaseSecret(context))
           }
         }

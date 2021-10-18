@@ -2,6 +2,7 @@ package org.thoughtcrime.securesms.jobs;
 
 import android.app.Application;
 import android.content.Context;
+import android.net.Uri;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,8 @@ import org.signal.core.util.concurrent.SignalExecutors;
 import org.signal.core.util.logging.Log;
 import org.signal.zkgroup.profiles.ProfileKey;
 import org.signal.zkgroup.profiles.ProfileKeyCredential;
+import org.thoughtcrime.securesms.BuildConfig;
+import org.thoughtcrime.securesms.badges.models.Badge;
 import org.thoughtcrime.securesms.crypto.ProfileKeyUtil;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
 import org.thoughtcrime.securesms.database.GroupDatabase;
@@ -34,6 +37,7 @@ import org.thoughtcrime.securesms.transport.RetryLaterException;
 import org.thoughtcrime.securesms.util.Base64;
 import org.thoughtcrime.securesms.util.IdentityUtil;
 import org.thoughtcrime.securesms.util.ProfileUtil;
+import org.thoughtcrime.securesms.util.ScreenDensity;
 import org.thoughtcrime.securesms.util.SetUtil;
 import org.thoughtcrime.securesms.util.Stopwatch;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
@@ -329,6 +333,7 @@ public class RetrieveProfileJob extends BaseJob {
     setProfileName(recipient, profile.getName());
     setProfileAbout(recipient, profile.getAbout(), profile.getAboutEmoji());
     setProfileAvatar(recipient, profile.getAvatar());
+    setProfileBadges(recipient, profile.getBadges());
     clearUsername(recipient);
     setProfileCapabilities(recipient, profile.getCapabilities());
     setIdentityKey(recipient, profile.getIdentityKey());
@@ -340,6 +345,56 @@ public class RetrieveProfileJob extends BaseJob {
         setProfileKeyCredential(recipient, recipientProfileKey, profileKeyCredential.get());
       }
     }
+  }
+
+  private void setProfileBadges(@NonNull Recipient recipient, @Nullable List<SignalServiceProfile.Badge> badges) {
+    if (badges == null) {
+      return;
+    }
+
+    DatabaseFactory.getRecipientDatabase(context)
+                   .setBadges(recipient.getId(),
+                              badges.stream().map(RetrieveProfileJob::adaptFromServiceBadge).collect(java.util.stream.Collectors.toList()));
+  }
+
+  private static Badge adaptFromServiceBadge(@NonNull SignalServiceProfile.Badge serviceBadge) {
+    Pair<Uri, String> uriAndDensity = RetrieveProfileJob.getBestBadgeImageUriForDevice(serviceBadge);
+    return new Badge(
+        serviceBadge.getId(),
+        Badge.Category.Companion.fromCode(serviceBadge.getCategory()),
+        serviceBadge.getName(),
+        serviceBadge.getDescription(),
+        uriAndDensity.first(),
+        uriAndDensity.second(),
+        0L,
+        true
+    );
+  }
+
+
+  public static @NonNull Pair<Uri, String> getBestBadgeImageUriForDevice(@NonNull SignalServiceProfile.Badge serviceBadge) {
+    String bestDensity = ScreenDensity.getBestDensityBucketForDevice();
+
+    switch (bestDensity) {
+      case "ldpi":
+        return new Pair<>(getBadgeImageUri(serviceBadge.getLdpiUri()), "ldpi");
+      case "mdpi":
+        return new Pair<>(getBadgeImageUri(serviceBadge.getMdpiUri()), "mdpi");
+      case "hdpi":
+        return new Pair<>(getBadgeImageUri(serviceBadge.getHdpiUri()), "hdpi");
+      case "xxhdpi":
+        return new Pair<>(getBadgeImageUri(serviceBadge.getXxhdpiUri()), "xxhdpi");
+      case "xxxhdpi":
+        return new Pair<>(getBadgeImageUri(serviceBadge.getXxxhdpiUri()), "xxxhdpi");
+      default:
+        return new Pair<>(getBadgeImageUri(serviceBadge.getXhdpiUri()), "xdpi");
+    }
+  }
+
+  private static @NonNull Uri getBadgeImageUri(@NonNull String densityPath) {
+    return Uri.parse(BuildConfig.BADGE_STATIC_ROOT).buildUpon()
+              .appendPath(densityPath)
+              .build();
   }
 
   private void setProfileKeyCredential(@NonNull Recipient recipient,
