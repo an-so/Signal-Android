@@ -548,15 +548,13 @@ public final class ConversationListItem extends ConstraintLayout
         int      thumbSize = (int) DimensionUnit.SP.toPixels(20f);
         Bitmap   thumb     = glideRequests.asBitmap()
                                           .load(new DecryptableStreamUriLoader.DecryptableUri(thread.getSnippetUri()))
-                                          .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                                           .override(thumbSize, thumbSize)
-                                          .downsample(DownsampleStrategy.CENTER_OUTSIDE)
                                           .transform(
                                               new OverlayTransformation(ContextCompat.getColor(context, R.color.transparent_black_08)),
                                               new CenterCrop()
                                           )
                                           .submit()
-                                          .get(3, TimeUnit.SECONDS);
+                                          .get(1, TimeUnit.SECONDS);
 
         RoundedDrawable drawable = RoundedDrawable.fromBitmap(thumb);
         drawable.setBounds(0, 0, thumbSize, thumbSize);
@@ -590,7 +588,7 @@ public final class ConversationListItem extends ConstraintLayout
       } catch (ExecutionException | InterruptedException e) {
         return new SpannableString(body);
       } catch (TimeoutException e) {
-        Log.w(TAG, "Hit a timeout when generating a thumbnail!");
+        Log.w(TAG, "Hit a timeout when generating a thumbnail! " + thread.getSnippetUri());
         return new SpannableString(body);
       }
     } else {
