@@ -1,14 +1,9 @@
 package org.thoughtcrime.securesms.components.settings.app.subscription
 
 import android.app.Activity
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.net.ConnectivityManager
 import com.google.android.gms.wallet.PaymentData
 import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import org.signal.core.util.concurrent.SignalExecutors
@@ -18,10 +13,9 @@ import org.signal.donations.GooglePayApi
 import org.signal.donations.GooglePayPaymentSource
 import org.signal.donations.StripeApi
 import org.thoughtcrime.securesms.R
-import org.thoughtcrime.securesms.database.DatabaseFactory
+import org.thoughtcrime.securesms.database.SignalDatabase
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
 import org.thoughtcrime.securesms.jobmanager.JobTracker
-import org.thoughtcrime.securesms.jobmanager.impl.NetworkConstraint
 import org.thoughtcrime.securesms.jobs.BoostReceiptRequestResponseJob
 import org.thoughtcrime.securesms.jobs.SubscriptionReceiptRequestResponseJob
 import org.thoughtcrime.securesms.keyvalue.SignalStore
@@ -71,21 +65,8 @@ class DonationPaymentRepository(activity: Activity) : StripeApi.PaymentIntentFet
   }
 
   private fun scheduleSyncForAccountRecordChangeSync() {
-    DatabaseFactory.getRecipientDatabase(application).markNeedsSync(Recipient.self().id)
+    SignalDatabase.recipients.markNeedsSync(Recipient.self().id)
     StorageSyncHelper.scheduleSyncForDataChange()
-  }
-
-  fun internetConnectionObserver(): Observable<Boolean> = Observable.create {
-    val observer = object : BroadcastReceiver() {
-      override fun onReceive(context: Context?, intent: Intent?) {
-        if (!it.isDisposed) {
-          it.onNext(NetworkConstraint.isMet(application))
-        }
-      }
-    }
-
-    it.setCancellable { application.unregisterReceiver(observer) }
-    application.registerReceiver(observer, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
   }
 
   fun requestTokenFromGooglePay(price: FiatMoney, label: String, requestCode: Int) {
