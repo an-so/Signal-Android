@@ -139,6 +139,8 @@ class BoostViewModel(
           if (boost != null) {
             eventPublisher.onNext(DonationEvent.RequestTokenSuccess)
 
+            store.update { it.copy(stage = BoostState.Stage.PAYMENT_PIPELINE) }
+
             donationPaymentRepository.continuePayment(boost.price, paymentData).subscribeBy(
               onError = { throwable ->
                 store.update { it.copy(stage = BoostState.Stage.READY) }
@@ -172,15 +174,16 @@ class BoostViewModel(
       return
     }
 
-    store.update { it.copy(stage = BoostState.Stage.PAYMENT_PIPELINE) }
+    store.update { it.copy(stage = BoostState.Stage.TOKEN_REQUEST) }
 
-    boostToPurchase = if (snapshot.isCustomAmountFocused) {
+    val boost = if (snapshot.isCustomAmountFocused) {
       Boost(snapshot.customAmount)
     } else {
       snapshot.selectedBoost
     }
 
-    donationPaymentRepository.requestTokenFromGooglePay(snapshot.selectedBoost.price, label, fetchTokenRequestCode)
+    boostToPurchase = boost
+    donationPaymentRepository.requestTokenFromGooglePay(boost.price, label, fetchTokenRequestCode)
   }
 
   fun setSelectedBoost(boost: Boost) {
