@@ -15,6 +15,7 @@ import com.google.android.gms.wallet.WalletConstants;
 import org.signal.core.util.logging.Log;
 import org.signal.core.util.money.FiatMoney;
 import org.signal.donations.GooglePayApi;
+import org.signal.donations.GooglePayApi.GooglePayException;
 
 import java.math.BigDecimal;
 import java.util.Currency;
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements GooglePayApi.Paym
   }
 
   @Override
-  public void onError(GooglePayException e) {
+  public void onError(GooglePayException googlePayException) {
     Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show();
     donateButton.setClickable(true);
   }
