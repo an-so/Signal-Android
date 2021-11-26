@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements GooglePayApi.Paym
     donateButton.setClickable(true);
   }
 
-  @Override
+  //@Override
   public void onError() {
     Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show();
     donateButton.setClickable(true);
